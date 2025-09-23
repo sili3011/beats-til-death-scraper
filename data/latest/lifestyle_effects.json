@@ -1,0 +1,26 @@
+{
+  "smoking": {
+    "current_vs_never_years": [
+      -10,
+      -5
+    ],
+    "quit_gain_years_after_5": 2
+  },
+  "exercise": {
+    "mod_150min_week_gain": 2,
+    "high_300min_week_gain": 3
+  },
+  "alcohol": {
+    "heavy_vs_moderate_years": -2
+  },
+  "diet": {
+    "mediterranean_adherence_gain": 1
+  },
+  "citations": [
+    "WHO Global Health Observatory: Tobacco and mortality (accessed 2024-09-23)",
+    "CDC Physical Activity Guidelines for Americans, 2nd edition (accessed 2024-09-23)",
+    "Prospective Studies Collaboration: Age-specific relevance of usual blood pressure to vascular mortality (accessed 2024-09-23)",
+    "Estruch R et al. Primary Prevention of Cardiovascular Disease with a Mediterranean Diet. NEJM 2013 (accessed 2024-09-23)"
+  ],
+  "notes": "Effect sizes are conservative estimates based on large population studies. Individual results may vary significantly. These estimates are for educational purposes only and should not be used for medical decision-making."
+}

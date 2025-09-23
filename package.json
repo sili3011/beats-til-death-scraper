@@ -1,0 +1,33 @@
+{
+  "name": "lifedata",
+  "version": "1.0.0",
+  "description": "Life expectancy and lifestyle effects data scraper",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "scrape:wb": "tsx src/pipelines/life-expectancy.ts --source worldbank",
+    "scrape:who": "tsx src/pipelines/life-expectancy.ts --source who",
+    "scrape:oecd": "tsx src/pipelines/life-expectancy.ts --source oecd",
+    "build:effects": "tsx src/pipelines/lifestyle-effects.ts",
+    "validate": "tsx src/lib/validate.ts",
+    "build": "pnpm scrape:wb && pnpm scrape:who && pnpm build:effects && pnpm validate",
+    "test": "vitest run",
+    "dev": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "zod": "^3.23.8",
+    "bottleneck": "^2.19.5",
+    "p-retry": "^6.2.0",
+    "i18n-iso-countries": "^7.8.0",
+    "csv-parse": "^5.5.6"
+  },
+  "devDependencies": {
+    "tsx": "^4.16.0",
+    "vitest": "^1.6.0",
+    "@types/node": "^20.11.0",
+    "typescript": "^5.0.0"
+  },
+  "keywords": ["life-expectancy", "health-data", "scraper", "lifestyle"],
+  "author": "",
+  "license": "MIT"
+}
