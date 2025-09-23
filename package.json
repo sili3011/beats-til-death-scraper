@@ -1,18 +1,35 @@
 {
-  "name": "lifedata",
-  "version": "1.0.0",
-  "description": "Life expectancy and lifestyle effects data scraper",
+  "name": "@sili3011/lifedata",
+  "version": "0.1.0",
+  "description": "Life expectancy and lifestyle effects data scraper with curated datasets",
   "type": "module",
-  "main": "dist/index.js",
+  "main": "data/latest/index.js",
+  "exports": {
+    ".": {
+      "import": "./data/latest/index.js",
+      "types": "./data/latest/index.d.ts"
+    },
+    "./life-expectancy": "./data/latest/life_expectancy.json",
+    "./lifestyle-effects": "./data/latest/lifestyle_effects.json"
+  },
+  "files": [
+    "data/latest/**/*",
+    "README.md",
+    "LICENSE",
+    "LICENSES/**/*"
+  ],
   "scripts": {
     "scrape:wb": "tsx src/pipelines/life-expectancy.ts --source worldbank",
     "scrape:who": "tsx src/pipelines/life-expectancy.ts --source who",
     "scrape:oecd": "tsx src/pipelines/life-expectancy.ts --source oecd",
     "build:effects": "tsx src/pipelines/lifestyle-effects.ts",
     "validate": "tsx src/lib/validate.ts",
-    "build": "pnpm scrape:wb && pnpm scrape:who && pnpm build:effects && pnpm validate",
+    "build": "npm run scrape:wb && npm run scrape:who && npm run build:effects && npm run validate",
+    "build:package": "npm run build && npm run generate:exports",
+    "generate:exports": "node scripts/generate-exports.js",
     "test": "vitest run",
-    "dev": "tsx src/index.ts"
+    "dev": "tsx src/index.ts",
+    "prepublishOnly": "npm run build:package"
   },
   "dependencies": {
     "zod": "^3.23.8",
@@ -27,7 +44,15 @@
     "@types/node": "^20.11.0",
     "typescript": "^5.0.0"
   },
-  "keywords": ["life-expectancy", "health-data", "scraper", "lifestyle"],
-  "author": "",
-  "license": "MIT"
+  "keywords": ["life-expectancy", "health-data", "scraper", "lifestyle", "world-bank", "who", "oecd"],
+  "author": "sili3011",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sili3011/beats-til-death-scraper.git"
+  },
+  "homepage": "https://github.com/sili3011/beats-til-death-scraper#readme",
+  "publishConfig": {
+    "access": "public"
+  }
 }

@@ -3,73 +3,94 @@ name: Daily Data Scrape
 on:
   schedule:
     # Run daily at 2 AM UTC
-    - cron: '0 2 * * *'
+    - cron: "0 2 * * *"
   workflow_dispatch: # Allow manual triggers
   push:
     branches: [main]
     paths:
-      - 'src/**'
-      - 'package.json'
-      - '.github/workflows/**'
+      - "src/**"
+      - "package.json"
+      - ".github/workflows/**"
+
+permissions:
+  contents: write
+  packages: write
+  actions: read
+  id-token: write
 
 jobs:
   scrape-and-update:
     runs-on: ubuntu-latest
-    
+    permissions:
+      contents: write
+      packages: write
+      id-token: write
+
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-        cache: 'npm'
-        
-    - name: Install pnpm
-      uses: pnpm/action-setup@v2
-      with:
-        version: 8
-        
-    - name: Install dependencies
-      run: pnpm install
-      
-    - name: Run data scraping pipeline
-      run: |
-        pnpm run build
-      env:
-        NODE_ENV: production
-        
-    - name: Check for changes
-      id: verify-changed-files
-      run: |
-        if [ -n "$(git status --porcelain)" ]; then
-          echo "changed=true" >> $GITHUB_OUTPUT
-        else
-          echo "changed=false" >> $GITHUB_OUTPUT
-        fi
-        
-    - name: Commit and push changes
-      if: steps.verify-changed-files.outputs.changed == 'true'
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add data/
-        git commit -m "chore: update data files $(date -u +%Y-%m-%d)"
-        git push
-        
-    - name: Create release on major data updates
-      if: steps.verify-changed-files.outputs.changed == 'true'
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        # Create a release on the first day of each month
-        if [ "$(date +%d)" = "01" ]; then
-          gh release create "v$(date +%Y.%m)" \
-            --title "Data Release $(date +%Y-%m)" \
-            --notes "Monthly data update including latest life expectancy and lifestyle effects data." \
-            data/latest/life_expectancy.json \
-            data/latest/lifestyle_effects.json
-        fi
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run data scraping pipeline
+        run: |
+          npm run build
+        env:
+          NODE_ENV: production
+
+      - name: Check for changes
+        id: verify-changed-files
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and push changes
+        if: steps.verify-changed-files.outputs.changed == 'true'
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add data/
+          git commit -m "chore: update data files $(date -u +%Y-%m-%d)"
+          git push origin main
+
+      - name: Bump version and publish to NPM
+        if: steps.verify-changed-files.outputs.changed == 'true'
+        run: |
+          # Generate version based on date: YYYY.M.D-HHMM for patch releases
+          DATE_VERSION=$(date -u +%Y.%-m.%-d-%H%M)
+          echo "Publishing version $DATE_VERSION to NPM"
+
+          # Update package version (creates git tag automatically)
+          npm version $DATE_VERSION
+
+          # Generate package exports
+          npm run generate:exports
+
+          # Add the generated exports to git
+          git add data/latest/
+          git commit --amend --no-edit
+
+          # Push the version tag
+          git push --follow-tags
+
+          # Enable supply-chain provenance (npm >= 9.5)
+          echo "NPM_CONFIG_PROVENANCE=true" >> $GITHUB_ENV
+
+          # Publish to NPM
+          npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_CI_TOKEN }}

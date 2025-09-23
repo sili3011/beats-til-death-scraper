@@ -1,0 +1,39 @@
+name: Publish to npm
+
+on:
+  push:
+    tags:
+      - "v*" # e.g., v1.2.3
+
+jobs:
+  publish:
+    permissions:
+      contents: read
+      id-token: write # for npm provenance
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: "https://registry.npmjs.org/"
+          cache: "npm"
+
+      - run: npm ci
+
+      - run: npm test --if-present
+
+      # Optional build
+      - run: npm run build --if-present
+
+      # Generate package exports before publishing
+      - run: npm run generate:exports
+
+      # Enable supply-chain provenance (npm >= 9.5)
+      - run: echo "NPM_CONFIG_PROVENANCE=true" >> $GITHUB_ENV
+
+      - name: Publish
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_CI_TOKEN }}

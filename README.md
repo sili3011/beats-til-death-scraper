@@ -2,6 +2,28 @@
 
 A TypeScript-based data scraper for life expectancy and lifestyle effects data from various authoritative sources including World Bank, WHO, and OECD.
 
+## 📦 NPM Package
+
+This data is also available as an NPM package for easy use in your applications:
+
+```bash
+npm install @sili3011/lifedata
+```
+
+```javascript
+import { lifeExpectancy, lifestyleEffects } from '@sili3011/lifedata';
+
+// Find life expectancy for a specific country and year
+const usaData = lifeExpectancy.find(row => 
+  row.country_code === 'USA' && row.year === 2020
+);
+
+// Access lifestyle effects
+console.log('Exercise benefits:', lifestyleEffects.exercise);
+```
+
+See [NPM_USAGE.md](NPM_USAGE.md) for complete usage documentation.
+
 ## Features
 
 - 🌍 **Multiple Data Sources**: World Bank, WHO, OECD, and manual data
