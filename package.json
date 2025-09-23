@@ -1,6 +1,6 @@
 {
   "name": "@sili3011/lifedata",
-  "version": "0.1.0",
+  "version": "2025.9.23-2247",
   "description": "Life expectancy and lifestyle effects data scraper with curated datasets",
   "type": "module",
   "main": "data/latest/index.js",
@@ -44,7 +44,15 @@
     "@types/node": "^20.11.0",
     "typescript": "^5.0.0"
   },
-  "keywords": ["life-expectancy", "health-data", "scraper", "lifestyle", "world-bank", "who", "oecd"],
+  "keywords": [
+    "life-expectancy",
+    "health-data",
+    "scraper",
+    "lifestyle",
+    "world-bank",
+    "who",
+    "oecd"
+  ],
   "author": "sili3011",
   "license": "MIT",
   "repository": {
