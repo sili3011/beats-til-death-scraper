@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { LifeRow, EffectsSchema } from '../types.js';
+import { LifeRow, EffectsSchema, RhrEffectSchema, SmokingEffectSchema, ExerciseEffectSchema } from '../types.js';
 import { log } from './log.js';
 
 /**
@@ -61,28 +61,44 @@ export async function validateEffectsData(filePath: string): Promise<boolean> {
 }
 
 /**
+ * Validate individual effect data files
+ */
+export async function validateEffectFile(filePath: string, schema: any, name: string): Promise<boolean> {
+  try {
+    const content = await fs.readFile(filePath, 'utf8');
+    const data = JSON.parse(content);
+    
+    schema.parse(data);
+    log(`${name} data validation passed`);
+    return true;
+  } catch (error) {
+    log(`${name} validation failed: ${error}`);
+    return false;
+  }
+}
+
+/**
  * Main validation function
  */
 export async function validateAll(): Promise<void> {
   const latestDir = 'data/latest';
-  const lifeFile = path.join(latestDir, 'life_expectancy.json');
-  const effectsFile = path.join(latestDir, 'lifestyle_effects.json');
+  const files = [
+    { path: path.join(latestDir, 'life_expectancy.json'), validator: validateLifeData, name: 'Life expectancy' },
+    { path: path.join(latestDir, 'lifestyle_effects.json'), validator: validateEffectsData, name: 'Lifestyle effects' },
+    { path: path.join(latestDir, 'rhr_effect.json'), validator: (p: string) => validateEffectFile(p, RhrEffectSchema, 'RHR effect'), name: 'RHR effect' },
+    { path: path.join(latestDir, 'smoking_effect.json'), validator: (p: string) => validateEffectFile(p, SmokingEffectSchema, 'Smoking effect'), name: 'Smoking effect' },
+    { path: path.join(latestDir, 'exercise_effect.json'), validator: (p: string) => validateEffectFile(p, ExerciseEffectSchema, 'Exercise effect'), name: 'Exercise effect' }
+  ];
   
   let allValid = true;
   
-  // Check if files exist
-  try {
-    await fs.access(lifeFile);
-    allValid = allValid && await validateLifeData(lifeFile);
-  } catch {
-    log(`Warning: Life expectancy file not found: ${lifeFile}`);
-  }
-  
-  try {
-    await fs.access(effectsFile);
-    allValid = allValid && await validateEffectsData(effectsFile);
-  } catch {
-    log(`Warning: Effects file not found: ${effectsFile}`);
+  for (const file of files) {
+    try {
+      await fs.access(file.path);
+      allValid = allValid && await file.validator(file.path);
+    } catch {
+      log(`Warning: ${file.name} file not found: ${file.path}`);
+    }
   }
   
   if (!allValid) {

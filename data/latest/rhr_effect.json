@@ -1,0 +1,42 @@
+{
+  "neutral_bpm": 70,
+  "hr_per_10bpm": {
+    "low": 1.08,
+    "mid": 1.1,
+    "high": 1.12
+  },
+  "bands": [
+    {
+      "min": 0,
+      "max": 59,
+      "rr_allcause": 0.9
+    },
+    {
+      "min": 60,
+      "max": 69,
+      "rr_allcause": 1
+    },
+    {
+      "min": 70,
+      "max": 79,
+      "rr_allcause": 1.1
+    },
+    {
+      "min": 80,
+      "max": 89,
+      "rr_allcause": 1.21
+    },
+    {
+      "min": 90,
+      "max": 300,
+      "rr_allcause": 1.33
+    }
+  ],
+  "citations": [
+    "Meta-analysis: Resting heart rate and all-cause and cardiovascular mortality: meta-analysis of prospective studies (DOI: 10.1136/heartjnl-2013-304498)",
+    "Copenhagen City Heart Study: Resting heart rate and mortality (DOI: 10.1136/hrt.2012.307542)",
+    "Framingham Heart Study: Resting heart rate as a low tech predictor of coronary events (DOI: 10.1016/j.amjmed.2009.12.015)"
+  ],
+  "retrieved_at": "2025-09-26",
+  "notes": "Effect sizes based on meta-analyses of prospective cohort studies. Adjusted for age, sex, and smoking where available. Conservative estimates for educational use only."
+}

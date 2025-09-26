@@ -1,0 +1,16 @@
+{
+  "current_vs_never_years": [
+    -10,
+    -6
+  ],
+  "quit_gain_years_after_5": 3,
+  "quit_gain_years_after_10": 5,
+  "citations": [
+    "WHO Global Health Observatory: Tobacco and mortality data (accessed 2025-09-26)",
+    "US Surgeon General Report: The Health Consequences of Smoking—50 Years of Progress (2014)",
+    "Doll R, et al. Mortality in relation to smoking: 50 years' observations on male British doctors. BMJ 2004;328:1519 (DOI: 10.1136/bmj.38142.554479.AE)",
+    "Jha P, et al. 21st-century hazards of smoking and benefits of cessation in the United States. N Engl J Med 2013;368:341-350 (DOI: 10.1056/NEJMsa1211128)"
+  ],
+  "retrieved_at": "2025-09-26",
+  "notes": "Effect sizes are conservative averages based on large cohort studies and meta-analyses. Years lost/gained vary by age of initiation, intensity, and cessation age."
+}

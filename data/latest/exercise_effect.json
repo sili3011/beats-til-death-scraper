@@ -1,0 +1,14 @@
+{
+  "none": 0,
+  "mod_150min_week_gain": 2.5,
+  "high_300min_week_gain": 4.2,
+  "citations": [
+    "WHO Global Recommendations on Physical Activity for Health (2010)",
+    "CDC Physical Activity Guidelines for Americans, 2nd edition (2018)",
+    "Wen CP, et al. Minimum amount of physical activity for reduced mortality and extended life expectancy. Lancet 2011;378:1244-53 (DOI: 10.1016/S0140-6736(11)60749-6)",
+    "Moore SC, et al. Leisure time physical activity of moderate to vigorous intensity and mortality: a large pooled cohort analysis. PLoS Med 2012;9:e1001335 (DOI: 10.1371/journal.pmed.1001335)",
+    "Zhao M, et al. Recommended physical activity and all cause and cause specific mortality in US adults: prospective cohort study. BMJ 2020;370:m2031 (DOI: 10.1136/bmj.m2031)"
+  ],
+  "retrieved_at": "2025-09-26",
+  "notes": "Years gained are approximate and conservative estimates from large cohort studies. Effects may vary by age, baseline fitness, and type of activity."
+}

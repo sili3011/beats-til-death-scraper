@@ -10,7 +10,10 @@
       "types": "./data/latest/index.d.ts"
     },
     "./life-expectancy": "./data/latest/life_expectancy.json",
-    "./lifestyle-effects": "./data/latest/lifestyle_effects.json"
+    "./lifestyle-effects": "./data/latest/lifestyle_effects.json",
+    "./rhr-effect": "./data/latest/rhr_effect.json",
+    "./smoking-effect": "./data/latest/smoking_effect.json",
+    "./exercise-effect": "./data/latest/exercise_effect.json"
   },
   "files": [
     "data/latest/**/*",
@@ -23,8 +26,11 @@
     "scrape:who": "tsx src/pipelines/life-expectancy.ts --source who",
     "scrape:oecd": "tsx src/pipelines/life-expectancy.ts --source oecd",
     "build:effects": "tsx src/pipelines/lifestyle-effects.ts",
+    "build:rhr": "tsx src/pipelines/rhr-effect.ts",
+    "build:smoking": "tsx src/pipelines/smoking-effect.ts",
+    "build:exercise": "tsx src/pipelines/exercise-effect.ts",
     "validate": "tsx src/lib/validate.ts",
-    "build": "npm run scrape:wb && npm run scrape:who && npm run build:effects && npm run validate",
+    "build": "npm run scrape:wb && npm run scrape:who && npm run build:effects && npm run build:rhr && npm run build:smoking && npm run build:exercise && npm run validate",
     "build:package": "npm run build && npm run generate:exports",
     "generate:exports": "node scripts/generate-exports.js",
     "test": "vitest run",

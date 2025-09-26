@@ -34,36 +34,6 @@ See [NPM_USAGE.md](NPM_USAGE.md) for complete usage documentation.
 - ✅ **Data Validation**: Zod schema validation for all outputs
 - 🚦 **Rate Limiting**: Respectful API usage with retry mechanisms
 
-## Project Structure
-
-```
-lifedata/
-├── src/
-│   ├── sources/          # Data source implementations
-│   │   ├── worldbank.ts  # World Bank API integration
-│   │   ├── who.ts        # WHO GHO API (placeholder)
-│   │   ├── oecd.ts       # OECD Stats API (placeholder)
-│   │   └── manual.ts     # Manual CSV data loader
-│   ├── pipelines/        # Data processing pipelines
-│   │   ├── life-expectancy.ts    # Life expectancy pipeline
-│   │   └── lifestyle-effects.ts  # Lifestyle effects pipeline
-│   ├── lib/              # Utility libraries
-│   │   ├── fetcher.ts    # HTTP client with retries and rate limiting
-│   │   ├── files.ts      # File operations
-│   │   ├── normalize.ts  # Data normalization utilities
-│   │   ├── validate.ts   # Data validation
-│   │   └── log.ts        # Logging utilities
-│   ├── types.ts          # TypeScript type definitions
-│   └── index.ts          # Main entry point
-├── data/
-│   ├── raw/              # Raw data by date
-│   ├── processed/        # Processed data by date
-│   ├── latest/           # Latest processed data
-│   └── manual/           # Manual CSV files
-├── LICENSES/             # License and attribution information
-└── .github/workflows/    # GitHub Actions CI/CD
-```
-
 ## Installation
 
 1. Clone the repository:
