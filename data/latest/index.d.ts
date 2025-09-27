@@ -1,5 +1,5 @@
 // Auto-generated TypeScript definitions for lifedata
-// Generated on: 2025-09-26T22:59:21.470Z
+// Generated on: 2025-09-27T02:45:46.675Z
 
 export interface LifeRow {
   country_code: string;
