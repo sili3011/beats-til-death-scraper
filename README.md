@@ -59,16 +59,24 @@ const usaData2020 = lifeExpectancy.find(
 
 // New health effects data
 console.log("Neutral heart rate:", rhrEffect.neutral_bpm); // 70 BPM
-console.log("Smoking cessation benefit:", smokingEffect.quit_gain_years_after_5); // 2 years
+console.log(
+  "Smoking cessation benefit:",
+  smokingEffect.quit_gain_years_after_5
+); // 2 years
 console.log("Exercise benefit:", exerciseEffect.mod_150min_week_gain); // 2 years
-console.log("Alcohol effect (heavy vs moderate):", alcoholEffect.heavy_vs_moderate_years); // -5.5 years
+console.log(
+  "Alcohol effect (heavy vs moderate):",
+  alcoholEffect.heavy_vs_moderate_years
+); // -5.5 years
 console.log("Weight effect (obese years lost):", weightEffect.obese_years_lost); // -3.1 years
 
 // Get all data at once
 const allData = getAllData();
 // Sorted order in allData:
 // lifeExpectancy, rhrEffect, smokingEffect, exerciseEffect, alcoholEffect, weightEffect, lifestyleEffects, metadata, getAllData
-console.log(`Package contains ${allData.metadata.lifeExpectancyRecords} records`);
+console.log(
+  `Package contains ${allData.metadata.lifeExpectancyRecords} records`
+);
 ```
 
 ### CommonJS
@@ -208,7 +216,10 @@ interface AlcoholEffect {
 }
 
 // Usage example
-console.log("Heavy drinking years lost:", alcoholEffect.heavy_vs_moderate_years);
+console.log(
+  "Heavy drinking years lost:",
+  alcoholEffect.heavy_vs_moderate_years
+);
 ```
 
 ### Weight/BMI Effects
