@@ -5,7 +5,17 @@
       "Bash(npm run build:*)",
       "WebSearch",
       "WebFetch(domain:data.oecd.org)",
-      "Bash(npm run scrape:oecd:*)"
+      "Bash(npm run scrape:oecd:*)",
+      "WebFetch(domain:apps.who.int)",
+      "WebFetch(domain:www.who.int)",
+      "Bash(curl:*)",
+      "Bash(tsx:*)",
+      "Bash(npx tsx:*)",
+      "Bash(npm run scrape:alcohol:*)",
+      "Bash(npm run scrape:bmi:*)",
+      "Bash(npm run validate:*)",
+      "Bash(npm run scrape:who:*)",
+      "Bash(tree:*)"
     ],
     "deny": [],
     "ask": []

@@ -1,6 +1,6 @@
 {
   "name": "@sili3011/lifedata",
-  "version": "2025.9.28-26",
+  "version": "2025.9.28-261",
   "description": "Life expectancy and lifestyle effects data scraper with curated datasets",
   "type": "module",
   "main": "data/latest/index.js",
@@ -13,7 +13,11 @@
     "./lifestyle-effects": "./data/latest/lifestyle_effects.json",
     "./rhr-effect": "./data/latest/rhr_effect.json",
     "./smoking-effect": "./data/latest/smoking_effect.json",
-    "./exercise-effect": "./data/latest/exercise_effect.json"
+    "./exercise-effect": "./data/latest/exercise_effect.json",
+    "./alcohol-effect": "./data/latest/alcohol_effect.json",
+    "./weight-effect": "./data/latest/weight_effect.json",
+    "./alcohol-consumption": "./data/latest/alcohol_consumption.json",
+    "./bmi-obesity": "./data/latest/bmi_obesity.json"
   },
   "files": [
     "data/latest/**/*",
@@ -25,12 +29,16 @@
     "scrape:wb": "tsx src/pipelines/life-expectancy.ts --source worldbank",
     "scrape:who": "tsx src/pipelines/life-expectancy.ts --source who",
     "scrape:oecd": "tsx src/pipelines/life-expectancy.ts --source oecd",
+    "scrape:alcohol": "tsx src/pipelines/alcohol-data.ts --source who",
+    "scrape:bmi": "tsx src/pipelines/bmi-data.ts --source who",
     "build:effects": "tsx src/pipelines/lifestyle-effects.ts",
     "build:rhr": "tsx src/pipelines/rhr-effect.ts",
     "build:smoking": "tsx src/pipelines/smoking-effect.ts",
     "build:exercise": "tsx src/pipelines/exercise-effect.ts",
+    "build:alcohol": "tsx src/pipelines/alcohol-effect.ts",
+    "build:weight": "tsx src/pipelines/weight-effect.ts",
     "validate": "tsx src/lib/validate.ts",
-    "build": "npm run scrape:wb && npm run scrape:who && npm run build:effects && npm run build:rhr && npm run build:smoking && npm run build:exercise && npm run validate",
+    "build": "npm run scrape:wb && npm run scrape:who && npm run scrape:alcohol && npm run scrape:bmi && npm run build:effects && npm run build:rhr && npm run build:smoking && npm run build:exercise && npm run build:alcohol && npm run build:weight && npm run validate",
     "build:package": "npm run build && npm run generate:exports",
     "generate:exports": "node scripts/generate-exports.js",
     "test": "vitest run",

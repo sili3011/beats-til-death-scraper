@@ -1,10 +1,16 @@
-import { LifeRow } from '../types.js';
+import { LifeRow, AlcoholRow, BMIRow } from '../types.js';
 import { httpGetJson } from '../lib/fetcher.js';
 import { log, logError, logWarning } from '../lib/log.js';
 
-// WHO Global Health Observatory API
+// WHO Global Health Observatory API URLs
 // Life expectancy at birth (both sexes) - indicator WHOSIS_000001
-const WHO_URL = 'https://ghoapi.azureedge.net/api/WHOSIS_000001?$filter=Dim1%20eq%20%27SEX_BTSX%27';
+const WHO_LIFE_EXPECTANCY_URL = 'https://ghoapi.azureedge.net/api/WHOSIS_000001?$filter=Dim1%20eq%20%27SEX_BTSX%27';
+// Total alcohol per capita consumption (15+) - recorded alcohol consumption
+const WHO_ALCOHOL_URL = 'https://ghoapi.azureedge.net/api/SA_0000001400';
+// Prevalence of obesity among adults, BMI >= 30 (age-standardized estimate)
+const WHO_OBESITY_URL = 'https://ghoapi.azureedge.net/api/NCD_BMI_30A';
+// Optional: Overweight prevalence BMI >= 25
+const WHO_OVERWEIGHT_URL = 'https://ghoapi.azureedge.net/api/NCD_BMI_25A';
 
 interface WHOResponse {
   value: Array<{
@@ -82,15 +88,15 @@ const WHO_TO_ISO3: Record<string, string> = {
   'YEM': 'YEM', 'ZMB': 'ZMB', 'ZWE': 'ZWE'
 };
 
-export async function fetchWHO(): Promise<LifeRow[]> {
+export async function fetchWHOLifeExpectancy(): Promise<LifeRow[]> {
   const out: LifeRow[] = [];
-  
+
   try {
-    log('Starting WHO Global Health Observatory data fetch...');
-    
-    const response = await httpGetJson(WHO_URL);
+    log('Starting WHO Global Health Observatory life expectancy data fetch...');
+
+    const response = await httpGetJson(WHO_LIFE_EXPECTANCY_URL);
     if (response.status === 304) {
-      log('WHO data not modified');
+      log('WHO life expectancy data not modified');
       return [];
     }
     
@@ -143,11 +149,231 @@ export async function fetchWHO(): Promise<LifeRow[]> {
       }
     }
     
-    log(`Successfully fetched ${out.length} WHO records`);
+    log(`Successfully fetched ${out.length} WHO life expectancy records`);
     return out;
-    
+
   } catch (error) {
-    logError('Failed to fetch WHO data', error);
+    logError('Failed to fetch WHO life expectancy data', error);
     throw error;
   }
+}
+
+export async function fetchWHOAlcoholConsumption(): Promise<AlcoholRow[]> {
+  const out: AlcoholRow[] = [];
+
+  try {
+    log('Starting WHO alcohol consumption data fetch...');
+
+    const response = await httpGetJson(WHO_ALCOHOL_URL);
+    if (response.status === 304) {
+      log('WHO alcohol data not modified');
+      return [];
+    }
+
+    const data = response.json as WHOResponse;
+
+    if (!data.value || !Array.isArray(data.value)) {
+      logWarning('No WHO alcohol consumption data values found');
+      return [];
+    }
+
+    for (const record of data.value) {
+      try {
+        // Skip records without numeric values
+        if (!record.NumericValue || record.NumericValue < 0) continue;
+
+        // Validate spatial dimension (country code)
+        const countryCode = record.SpatialDim;
+        if (!countryCode || countryCode.length !== 3) continue;
+
+        const iso3Code = WHO_TO_ISO3[countryCode];
+        if (!iso3Code) {
+          // Skip unknown country codes silently
+          continue;
+        }
+
+        // Validate year
+        const year = record.TimeDim;
+        if (!year || year < 1950 || year > 2100) continue;
+
+        // Validate alcohol consumption value (liters of pure alcohol per capita)
+        const alcoholConsumption = record.NumericValue;
+        if (alcoholConsumption < 0 || alcoholConsumption > 50) continue; // reasonable bounds
+
+        // Use ParentLocation as country name if available
+        const countryName = record.ParentLocation && record.ParentLocation !== 'null'
+          ? record.ParentLocation
+          : countryCode;
+
+        out.push({
+          country_code: iso3Code,
+          country_name: countryName,
+          year,
+          alcohol_consumption: alcoholConsumption,
+          source: 'who',
+          retrieved_at: new Date().toISOString()
+        });
+
+      } catch (error) {
+        logError(`Failed to process WHO alcohol record: ${JSON.stringify(record)}`, error);
+      }
+    }
+
+    log(`Successfully fetched ${out.length} WHO alcohol consumption records`);
+    return out;
+
+  } catch (error) {
+    logError('Failed to fetch WHO alcohol consumption data', error);
+    return [];
+  }
+}
+
+async function fetchWHOBMIData(url: string, dataType: 'obesity' | 'overweight'): Promise<Map<string, number>> {
+  const dataMap = new Map<string, number>();
+
+  try {
+    log(`Fetching WHO ${dataType} data...`);
+
+    const response = await httpGetJson(url);
+    if (response.status === 304) {
+      log(`WHO ${dataType} data not modified`);
+      return dataMap;
+    }
+
+    const data = response.json as WHOResponse;
+
+    if (!data.value || !Array.isArray(data.value)) {
+      logWarning(`No WHO ${dataType} data values found`);
+      return dataMap;
+    }
+
+    for (const record of data.value) {
+      try {
+        // Skip records without numeric values
+        if (!record.NumericValue || record.NumericValue < 0) continue;
+
+        // Validate spatial dimension (country code)
+        const countryCode = record.SpatialDim;
+        if (!countryCode || countryCode.length !== 3) continue;
+
+        const iso3Code = WHO_TO_ISO3[countryCode];
+        if (!iso3Code) continue;
+
+        // Validate year
+        const year = record.TimeDim;
+        if (!year || year < 1950 || year > 2100) continue;
+
+        // Validate prevalence percentage (0-100%)
+        const prevalence = record.NumericValue;
+        if (prevalence < 0 || prevalence > 100) continue;
+
+        // Create unique key for country-year combination
+        const key = `${iso3Code}-${year}`;
+        dataMap.set(key, prevalence);
+
+      } catch (error) {
+        // Skip invalid records silently
+      }
+    }
+
+    log(`Successfully processed ${dataMap.size} WHO ${dataType} records`);
+    return dataMap;
+
+  } catch (error) {
+    logError(`Failed to fetch WHO ${dataType} data`, error);
+    return dataMap;
+  }
+}
+
+function getCountryName(countryCode: string): string {
+  // Simple country code to name mapping for common countries
+  const countryNames: Record<string, string> = {
+    'USA': 'United States',
+    'GBR': 'United Kingdom',
+    'CAN': 'Canada',
+    'AUS': 'Australia',
+    'FRA': 'France',
+    'DEU': 'Germany',
+    'JPN': 'Japan',
+    'CHN': 'China',
+    'IND': 'India',
+    'BRA': 'Brazil',
+    'RUS': 'Russia',
+    'ITA': 'Italy',
+    'ESP': 'Spain',
+    'MEX': 'Mexico'
+  };
+
+  return countryNames[countryCode] || countryCode;
+}
+
+export async function fetchWHOBMI(): Promise<BMIRow[]> {
+  const out: BMIRow[] = [];
+
+  try {
+    log('Starting WHO BMI/obesity data fetch...');
+
+    // Fetch both obesity and overweight data
+    const [obesityData, overweightData] = await Promise.all([
+      fetchWHOBMIData(WHO_OBESITY_URL, 'obesity'),
+      fetchWHOBMIData(WHO_OVERWEIGHT_URL, 'overweight')
+    ]);
+
+    // Combine the data - use obesity data as the primary source
+    const processedKeys = new Set<string>();
+
+    for (const [key, obesityPrevalence] of obesityData) {
+      const [countryCode, yearStr] = key.split('-');
+      const year = parseInt(yearStr);
+
+      // Get corresponding overweight data if available
+      const overweightPrevalence = overweightData.get(key);
+
+      // Get country name
+      const countryName = getCountryName(countryCode);
+
+      out.push({
+        country_code: countryCode,
+        country_name: countryName,
+        year,
+        obesity_prevalence: obesityPrevalence,
+        overweight_prevalence: overweightPrevalence,
+        source: 'who',
+        retrieved_at: new Date().toISOString()
+      });
+
+      processedKeys.add(key);
+    }
+
+    // Add overweight-only data (where we don't have obesity data)
+    for (const [key, overweightPrevalence] of overweightData) {
+      if (processedKeys.has(key)) continue;
+
+      const [countryCode, yearStr] = key.split('-');
+      const year = parseInt(yearStr);
+      const countryName = getCountryName(countryCode);
+
+      out.push({
+        country_code: countryCode,
+        country_name: countryName,
+        year,
+        obesity_prevalence: 0, // Will be filtered out or handled appropriately
+        overweight_prevalence: overweightPrevalence,
+        source: 'who',
+        retrieved_at: new Date().toISOString()
+      });
+    }
+
+    log(`Successfully fetched ${out.length} WHO BMI/obesity records`);
+    return out;
+
+  } catch (error) {
+    logError('Failed to fetch WHO BMI/obesity data', error);
+    return [];
+  }
+}
+
+// Keep the original function name for backwards compatibility
+export async function fetchWHO(): Promise<LifeRow[]> {
+  return fetchWHOLifeExpectancy();
 }

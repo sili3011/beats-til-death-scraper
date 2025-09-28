@@ -1,0 +1,23 @@
+{
+  "none": 0,
+  "light_years_gain": 0.5,
+  "light_consumption_range": [
+    0.1,
+    1
+  ],
+  "moderate_years_gain": 0,
+  "moderate_consumption_range": [
+    1,
+    2
+  ],
+  "heavy_vs_moderate_years": -5.5,
+  "heavy_consumption_threshold": 3,
+  "citations": [
+    "Di Castelnuovo A, et al. Alcohol dosing and total mortality in men and women: an updated meta-analysis of 34 prospective studies. Arch Intern Med. 2006;166(22):2437-45.",
+    "Wood AM, et al. Risk thresholds for alcohol consumption: combined analysis of individual-participant data for 599 912 current drinkers in 83 prospective studies. Lancet. 2018;391(10129):1513-1523.",
+    "Griswold MG, et al. Alcohol use and burden for 195 countries and territories, 1990–2016: a systematic analysis for the Global Burden of Disease Study 2016. Lancet. 2018;392(10152):1015-1035.",
+    "GBD 2016 Alcohol and Drug Use Collaborators. The global burden of disease attributable to alcohol and drug use in 195 countries and territories, 1990–2016. Lancet Psychiatry. 2018;5(12):987-1012."
+  ],
+  "retrieved_at": "2025-09-28T00:47:09.561Z",
+  "notes": "Conservative estimates based on meta-analyses of prospective studies. Light consumption benefits are controversial and may not apply to all populations. Heavy drinking (>3L pure alcohol/year) significantly reduces life expectancy. Effects vary by individual factors including genetics, age, sex, and overall health status. For educational purposes only."
+}
