@@ -1,5 +1,5 @@
 // Auto-generated TypeScript definitions for lifedata
-// Generated on: 2025-09-28T12:34:26.178Z
+// Generated on: 2025-09-28T12:47:27.249Z
 
 export interface LifeRow {
   country_code: string;
@@ -65,7 +65,10 @@ export interface ExerciseEffect {
 }
 
 export interface WeightEffect {
-  none: number;
+  normal_bmi: [number, number];
+  overweight_years_lost: number;
+  obese_years_lost: number;
+  severely_obese_years_lost: number;
   citations: string[];
   retrieved_at: string;
   notes: string;
