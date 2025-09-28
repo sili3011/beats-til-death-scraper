@@ -2,6 +2,33 @@
 
 Comprehensive life expectancy data (20,699+ records) and evidence-based health effects data from authoritative sources including World Bank, WHO, and medical meta-analyses.
 
+## Table of Contents
+
+1. [Installation](#installation)
+2. [Quick Start](#quick-start)
+   - [ES Modules (Recommended)](#es-modules-recommended)
+   - [CommonJS](#commonjs)
+   - [Default Import](#default-import)
+3. [Data Structures](#data-structures)
+   - [Life Expectancy Data](#life-expectancy-data)
+   - [Resting Heart Rate Effects](#resting-heart-rate-effects)
+   - [Smoking Effects](#smoking-effects)
+   - [Exercise Effects](#exercise-effects)
+   - [Alcohol Effects](#alcohol-effects)
+   - [Weight/BMI Effects](#weightbmi-effects)
+   - [Legacy Lifestyle Effects (Deprecated)](#legacy-lifestyle-effects-deprecated)
+   - [Metadata Structure](#metadata-structure)
+4. [Practical Examples](#practical-examples)
+   - [Health Risk Calculator](#health-risk-calculator)
+   - [Country Comparison Tool](#country-comparison-tool)
+5. [Data Sources & Citations](#data-sources--citations)
+6. [Error Handling](#error-handling)
+7. [TypeScript Support](#typescript-support)
+8. [Update Frequency](#update-frequency)
+9. [Best Practices](#best-practices)
+10. [License & Attribution](#license--attribution)
+11. [Support & Contributing](#support--contributing)
+
 ## Installation
 
 ```bash
@@ -18,6 +45,8 @@ import {
   rhrEffect,
   smokingEffect,
   exerciseEffect,
+  alcoholEffect,
+  weightEffect,
   lifestyleEffects,
   metadata,
   getAllData,
@@ -30,17 +59,16 @@ const usaData2020 = lifeExpectancy.find(
 
 // New health effects data
 console.log("Neutral heart rate:", rhrEffect.neutral_bpm); // 70 BPM
-console.log(
-  "Smoking cessation benefit:",
-  smokingEffect.quit_gain_years_after_5
-); // 2 years
+console.log("Smoking cessation benefit:", smokingEffect.quit_gain_years_after_5); // 2 years
 console.log("Exercise benefit:", exerciseEffect.mod_150min_week_gain); // 2 years
+console.log("Alcohol effect (heavy vs moderate):", alcoholEffect.heavy_vs_moderate_years); // -5.5 years
+console.log("Weight effect (obese years lost):", weightEffect.obese_years_lost); // -3.1 years
 
 // Get all data at once
 const allData = getAllData();
-console.log(
-  `Package contains ${allData.metadata.lifeExpectancyRecords} records`
-);
+// Sorted order in allData:
+// lifeExpectancy, rhrEffect, smokingEffect, exerciseEffect, alcoholEffect, weightEffect, lifestyleEffects, metadata, getAllData
+console.log(`Package contains ${allData.metadata.lifeExpectancyRecords} records`);
 ```
 
 ### CommonJS
@@ -161,6 +189,47 @@ const getExerciseBenefit = (minutesPerWeek: number) => {
 };
 ```
 
+### Alcohol Effects
+
+Curated alcohol consumption effect data:
+
+```typescript
+interface AlcoholEffect {
+  none: number; // Baseline - no consumption
+  light_years_gain: number; // Light consumption benefit
+  light_consumption_range: [number, number]; // 0.1-1.0 liters/year
+  moderate_years_gain: number; // Moderate consumption
+  moderate_consumption_range: [number, number]; // 1.0-2.0 liters/year
+  heavy_vs_moderate_years: number; // Heavy drinking vs moderate
+  heavy_consumption_threshold: number; // >3.0 liters/year
+  citations: string[];
+  retrieved_at: string;
+  notes: string;
+}
+
+// Usage example
+console.log("Heavy drinking years lost:", alcoholEffect.heavy_vs_moderate_years);
+```
+
+### Weight/BMI Effects
+
+Curated BMI/weight effect data:
+
+```typescript
+interface WeightEffect {
+  normal_bmi: [number, number]; // Normal BMI range
+  overweight_years_lost: number; // Years lost from overweight
+  obese_years_lost: number; // Years lost from obesity
+  severely_obese_years_lost: number; // Years lost from severe obesity
+  citations: string[];
+  retrieved_at: string;
+  notes: string;
+}
+
+// Usage example
+console.log("Obese years lost:", weightEffect.obese_years_lost);
+```
+
 ### Legacy Lifestyle Effects (Deprecated)
 
 Consolidated format - use specific effect files for detailed data:
@@ -185,18 +254,6 @@ interface Effects {
   notes?: string;
 }
 ```
-
-## Complete API Reference
-
-### Available Exports
-
-- `lifeExpectancy: LifeRow[]` - 20,699+ life expectancy records
-- `rhrEffect: RhrEffect | null` - Resting heart rate mortality effects
-- `smokingEffect: SmokingEffect | null` - Smoking cessation benefits
-- `exerciseEffect: ExerciseEffect | null` - Physical activity benefits
-- `lifestyleEffects: Effects` - Legacy consolidated effects (deprecated)
-- `metadata: Metadata` - Package information and statistics
-- `getAllData(): AllData` - Function returning all data objects
 
 ### Metadata Structure
 
