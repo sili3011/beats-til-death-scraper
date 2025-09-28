@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run scrape:wb:*)",
+      "Bash(npm run build:*)",
+      "WebSearch",
+      "WebFetch(domain:data.oecd.org)",
+      "Bash(npm run scrape:oecd:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
