@@ -18,6 +18,8 @@ async function generateExports() {
     rhrEffect: path.join(latestDir, "rhr_effect.json"),
     smokingEffect: path.join(latestDir, "smoking_effect.json"),
     exerciseEffect: path.join(latestDir, "exercise_effect.json"),
+    alcoholEffect: path.join(latestDir, "alcohol_effect.json"),
+    weightEffect: path.join(latestDir, "weight_effect.json"),
   };
 
   // Check if core files exist
@@ -84,6 +86,19 @@ export const smokingEffect = ${dataStrings.smokingEffect};
  */
 export const exerciseEffect = ${dataStrings.exerciseEffect};
 
+
+/**
+ * Alcohol effect data
+ * @type {import('./types.js').AlcoholEffect | null}
+ */
+export const alcoholEffect = ${dataStrings.alcoholEffect};
+
+/**
+ * Weight effect data
+ * @type {import('./types.js').WeightEffect | null}
+ */
+export const weightEffect = ${dataStrings.weightEffect};
+
 /**
  * Package metadata
  */
@@ -92,7 +107,7 @@ export const metadata = {
   lifeExpectancyRecords: ${data.lifeExpectancy?.length || 0},
   sources: ["worldbank", "who", "oecd", "manual"],
   version: "${process.env.npm_package_version || "1.0.0"}",
-  effectTypes: ["rhr", "smoking", "exercise", "lifestyle"]
+  effectTypes: ["rhr", "smoking", "exercise", "lifestyle", "alcohol", "weight"]
 };
 
 /**
@@ -105,6 +120,8 @@ export function getAllData() {
     rhrEffect,
     smokingEffect,
     exerciseEffect,
+    alcoholEffect,
+    weightEffect,
     metadata
   };
 }
@@ -116,6 +133,8 @@ export default {
   rhrEffect,
   smokingEffect,
   exerciseEffect,
+  alcoholEffect,
+  weightEffect,
   metadata,
   getAllData
 };

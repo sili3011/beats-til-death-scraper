@@ -136,6 +136,7 @@ Thumbs.db
 
 # Project specific
 # Keep the data directory structure but ignore actual data files
+data/latest/*/
 data/raw/*/
 data/processed/*/
 !data/raw/.gitkeep
