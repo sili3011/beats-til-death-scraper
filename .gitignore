@@ -140,8 +140,6 @@ data/raw/*/
 data/processed/*/
 !data/raw/.gitkeep
 !data/processed/.gitkeep
-# Keep latest data for easy access
-# data/latest/
 
 # Temporary files
 temp/
