@@ -1,5 +1,5 @@
 // Auto-generated TypeScript definitions for lifedata
-// Generated on: 2025-09-28T12:27:40.675Z
+// Generated on: 2025-09-28T12:34:26.178Z
 
 export interface LifeRow {
   country_code: string;
@@ -74,7 +74,7 @@ export interface WeightEffect {
 export interface AlcoholEffect {
   none: number;
   light_years_gain: number;    
-  light_consumption_range: [number, numb
+  light_consumption_range: [number, number];
   moderate_years_gain: number;
   moderate_consumption_range: [number, number];
   heavy_vs_moderate_years: number;
