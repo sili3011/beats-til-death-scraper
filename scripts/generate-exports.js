@@ -217,7 +217,7 @@ export interface WeightEffect {
 export interface AlcoholEffect {
   none: number;
   light_years_gain: number;    
-  light_consumption_range: [number, numb
+  light_consumption_range: [number, number];
   moderate_years_gain: number;
   moderate_consumption_range: [number, number];
   heavy_vs_moderate_years: number;
