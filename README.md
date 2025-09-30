@@ -87,8 +87,14 @@ console.log(
 );
 
 // Link to original sources/papers
-console.log('Drug/substance mortality WHO reference:', sourceInfo.datasets.who_drug_use_mortality.url);
-console.log('World Bank dataset:', sourceInfo.datasets.worldbank_life_expectancy.url);
+console.log(
+  "Drug/substance mortality WHO reference:",
+  sourceInfo.datasets.who_drug_use_mortality.url
+);
+console.log(
+  "World Bank dataset:",
+  sourceInfo.datasets.worldbank_life_expectancy.url
+);
 console.log("RHR references:", sourceInfo.effects.rhr?.references);
 ```
 
@@ -417,10 +423,10 @@ import type {
 
 ## Update Frequency
 
-- **Weekly Automation**: Package updates automatically at 2 AM UTC weekly
-- **Fresh Data**: Always includes latest available data from all sources
-- **Version Control**: Date-based versioning (YYYY.M.D-HHMM format)
-- **Manual Releases**: Tag-triggered releases for immediate updates
+- **Weekly Automation**: Publishes new versions to npm weekly at 2 AM UTC. The repository is not updated with generated data; latest datasets ship via npm.
+- **Fresh Data**: Always includes latest available data from configured sources
+- **Versioning**: Date-based versioning (YYYY.M.D-HHMM format)
+- **Manual Releases**: You can still publish manually by running the build and `npm publish` locally
 
 ## Best Practices
 
@@ -449,8 +455,6 @@ MIT License - see LICENSE file for details.
 - **Documentation**: Improvements welcome via pull requests
 - **Data Quality**: Report data inconsistencies or validation errors
 
-
-
 ### Drug/Substance Use Mortality Data
 
 WHO drug/substance-related mortality rates (per 100k population):
@@ -467,7 +471,7 @@ interface DrugUseMortalityRow {
 
 // Usage example
 const getDrugUseMortality = (code: string, year: number) =>
-  drugUseMortality?.find(r => r.country_code === code && r.year === year);
+  drugUseMortality?.find((r) => r.country_code === code && r.year === year);
 ```
 
 ### Smoking Prevalence
@@ -488,5 +492,3 @@ interface SmokingRow {
 ### Alcohol Consumption (OWID)
 
 Alternative source via OWID grapher datasets. Use script `npm run scrape:alcohol:owid`.
-
-

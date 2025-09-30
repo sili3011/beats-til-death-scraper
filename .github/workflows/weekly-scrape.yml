@@ -13,18 +13,16 @@ on:
       - ".github/workflows/**"
 
 permissions:
-  contents: write
+  contents: read
   packages: write
   actions: read
   id-token: write
 
 jobs:
-  scrape-and-update:
-    # Prevent workflow loop on bot commits
-    if: github.actor != 'github-actions[bot]'
+  scrape-and-publish:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
       packages: write
       id-token: write
 
@@ -51,17 +49,7 @@ jobs:
         env:
           NODE_ENV: production
 
-      - name: Check for changes
-        id: verify-changed-files
-        run: |
-          if [ -n "$(git status --porcelain)" ]; then
-            echo "changed=true" >> $GITHUB_OUTPUT
-          else
-            echo "changed=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Version, generate exports, commit, tag, push and publish
-        if: steps.verify-changed-files.outputs.changed == 'true'
+      - name: Version, generate exports, and publish to NPM (no git push)
         run: |
           # Generate version based on date: YYYY.M.D-HHMM for patch releases
           DATE_VERSION=$(date -u +%Y.%-m.%-d-%H%M)
@@ -73,16 +61,6 @@ jobs:
           # Generate package exports
           npm run generate:exports
 
-          # Configure git and commit all data + version changes (skip CI to avoid loops)
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git add data/ package.json package-lock.json || true
-          git commit -m "chore: data update and release $DATE_VERSION [skip ci]"
-
-          # Create and push tag, push commit
-          git tag "v$DATE_VERSION"
-          git push origin main --follow-tags
-
           # Enable supply-chain provenance (npm >= 9.5)
           echo "NPM_CONFIG_PROVENANCE=true" >> $GITHUB_ENV
 
@@ -90,4 +68,3 @@ jobs:
           npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_CI_TOKEN }}
-
