@@ -28,7 +28,14 @@ async function run() {
         'Fontaine KR, et al. Years of life lost due to obesity. JAMA. 2003;289(2):187-93.'
       ],
       retrieved_at: new Date().toISOString(),
-      notes: 'Conservative estimates based on large-scale meta-analyses and prospective cohort studies. Effects represent average population-level associations and may vary significantly based on individual factors including age, sex, genetics, body composition, fitness level, and comorbidities. The relationship between BMI and mortality follows a J-shaped curve, with both underweight and obesity associated with increased mortality. For educational purposes only.'
+      notes: 'Conservative estimates based on large-scale meta-analyses and prospective cohort studies. Effects represent average population-level associations and may vary significantly based on individual factors including age, sex, genetics, body composition, fitness level, and comorbidities. The relationship between BMI and mortality follows a J-shaped curve, with both underweight and obesity associated with increased mortality. For educational purposes only.',
+      references: [
+        { title: 'BMI and all-cause mortality (Lancet 2016)', url: 'https://doi.org/10.1016/S0140-6736(16)30175-1' },
+        { title: 'BMI and all cause mortality (BMJ 2016)', url: 'https://doi.org/10.1136/bmj.i2156' },
+        { title: 'BMI and all-cause mortality (Lancet 2016)', url: 'https://doi.org/10.1016/S0140-6736(16)30175-1' },
+        { title: 'BMI and cause-specific mortality (Lancet 2009)', url: 'https://doi.org/10.1016/S0140-6736(09)60318-4' },
+        { title: 'Years of life lost due to obesity (JAMA 2003)', url: 'https://doi.org/10.1001/jama.289.2.187' }
+      ]
     };
 
     // Validate the data

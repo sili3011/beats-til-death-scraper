@@ -29,7 +29,12 @@ const RHR_EFFECT_DATA: RhrEffect = {
     "Framingham Heart Study: Resting heart rate as a low tech predictor of coronary events (DOI: 10.1016/j.amjmed.2009.12.015)"
   ],
   retrieved_at: new Date().toISOString().split('T')[0]!,
-  notes: "Effect sizes based on meta-analyses of prospective cohort studies. Adjusted for age, sex, and smoking where available. Conservative estimates for educational use only."
+  notes: "Effect sizes based on meta-analyses of prospective cohort studies. Adjusted for age, sex, and smoking where available. Conservative estimates for educational use only.",
+  references: [
+    { title: 'RHR and mortality meta-analysis (Heart)', url: 'https://doi.org/10.1136/heartjnl-2013-304498' },
+    { title: 'RHR and mortality (Copenhagen City Heart Study)', url: 'https://doi.org/10.1136/hrt.2012.307542' },
+    { title: 'RHR predictor of coronary events (Framingham)', url: 'https://doi.org/10.1016/j.amjmed.2009.12.015' }
+  ]
 };
 
 export async function runRhrEffectPipeline(): Promise<void> {

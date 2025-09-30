@@ -20,7 +20,13 @@ const SMOKING_EFFECT_DATA: SmokingEffect = {
     "Jha P, et al. 21st-century hazards of smoking and benefits of cessation in the United States. N Engl J Med 2013;368:341-350 (DOI: 10.1056/NEJMsa1211128)"
   ],
   retrieved_at: new Date().toISOString().split('T')[0]!,
-  notes: "Effect sizes are conservative averages based on large cohort studies and meta-analyses. Years lost/gained vary by age of initiation, intensity, and cessation age."
+  notes: "Effect sizes are conservative averages based on large cohort studies and meta-analyses. Years lost/gained vary by age of initiation, intensity, and cessation age.",
+  references: [
+    { title: 'WHO GHO: Tobacco and mortality', url: 'https://www.who.int/data/gho/data/themes/topics/topic-details/GHO/tobacco-use' },
+    { title: 'US Surgeon General 2014: The Health Consequences of Smoking', url: 'https://www.hhs.gov/surgeongeneral/reports-and-publications/tobacco/index.html' },
+    { title: "Mortality in relation to smoking: 50 years' observations (BMJ 2004)", url: 'https://doi.org/10.1136/bmj.38142.554479.AE' },
+    { title: '21st-century hazards of smoking and benefits of cessation (NEJM 2013)', url: 'https://doi.org/10.1056/NEJMsa1211128' }
+  ]
 };
 
 export async function runSmokingEffectPipeline(): Promise<void> {

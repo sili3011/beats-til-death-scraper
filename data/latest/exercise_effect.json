@@ -10,5 +10,27 @@
     "Zhao M, et al. Recommended physical activity and all cause and cause specific mortality in US adults: prospective cohort study. BMJ 2020;370:m2031 (DOI: 10.1136/bmj.m2031)"
   ],
   "retrieved_at": "2025-09-30",
-  "notes": "Years gained are approximate and conservative estimates from large cohort studies. Effects may vary by age, baseline fitness, and type of activity."
+  "notes": "Years gained are approximate and conservative estimates from large cohort studies. Effects may vary by age, baseline fitness, and type of activity.",
+  "references": [
+    {
+      "title": "WHO Global Recommendations on Physical Activity for Health (2010)",
+      "url": "https://apps.who.int/iris/handle/10665/44399"
+    },
+    {
+      "title": "CDC Physical Activity Guidelines for Americans, 2nd edition (2018)",
+      "url": "https://health.gov/our-work/physical-activity/current-guidelines"
+    },
+    {
+      "title": "Minimum amount of physical activity (Lancet 2011)",
+      "url": "https://doi.org/10.1016/S0140-6736(11)60749-6"
+    },
+    {
+      "title": "Leisure time physical activity and mortality (PLoS Med 2012)",
+      "url": "https://doi.org/10.1371/journal.pmed.1001335"
+    },
+    {
+      "title": "Recommended physical activity and mortality (BMJ 2020)",
+      "url": "https://doi.org/10.1136/bmj.m2031"
+    }
+  ]
 }

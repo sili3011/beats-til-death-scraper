@@ -37,6 +37,7 @@ export const SmokingEffectSchema = z.object({
   citations: z.array(z.string()),
   retrieved_at: z.string(),
   notes: z.string()
+  , references: z.array(z.object({ title: z.string(), url: z.string().url() })).optional()
 });
 export type SmokingEffect = z.infer<typeof SmokingEffectSchema>;
 
@@ -47,7 +48,8 @@ export const ExerciseEffectSchema = z.object({
   high_300min_week_gain: z.number(),
   citations: z.array(z.string()),
   retrieved_at: z.string(),
-  notes: z.string()
+  notes: z.string(),
+  references: z.array(z.object({ title: z.string(), url: z.string().url() })).optional()
 });
 export type ExerciseEffect = z.infer<typeof ExerciseEffectSchema>;
 
@@ -73,7 +75,8 @@ export const AlcoholEffectSchema = z.object({
   heavy_consumption_threshold: z.number(), // liters threshold for heavy drinking
   citations: z.array(z.string()),
   retrieved_at: z.string(),
-  notes: z.string()
+  notes: z.string(),
+  references: z.array(z.object({ title: z.string(), url: z.string().url() })).optional()
 });
 export type AlcoholEffect = z.infer<typeof AlcoholEffectSchema>;
 
@@ -97,7 +100,8 @@ export const WeightEffectSchema = z.object({
   severely_obese_years_lost: z.number(),  // years lost from severe obesity (BMI >= 35)
   citations: z.array(z.string()),
   retrieved_at: z.string(),
-  notes: z.string()
+  notes: z.string(),
+  references: z.array(z.object({ title: z.string(), url: z.string().url() })).optional()
 });
 export type WeightEffect = z.infer<typeof WeightEffectSchema>;
 
