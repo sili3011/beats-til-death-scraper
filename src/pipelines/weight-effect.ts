@@ -19,7 +19,7 @@ async function run() {
       normal_bmi: [18.5, 24.9] as [number, number], // Normal BMI range
       overweight_years_lost: -1.3, // Years lost from being overweight (BMI 25-29.9)
       obese_years_lost: -3.1, // Years lost from obesity (BMI 30-34.9)
-      severely_obese_years_lost: -8.0, // Years lost from severe obesity (BMI ≥35)
+      severely_obese_years_lost: -8.0, // Years lost from severe obesity (BMI >= 35)
       citations: [
         'Global BMI Mortality Collaboration. Body-mass index and all-cause mortality: individual-participant-data meta-analysis of 239 prospective studies in four continents. Lancet. 2016;388(10046):776-86.',
         'Aune D, et al. BMI and all cause mortality: systematic review and non-linear dose-response meta-analysis of 230 cohort studies with 3.74 million deaths among 30.3 million participants. BMJ. 2016;353:i2156.',
@@ -33,7 +33,7 @@ async function run() {
 
     // Validate the data
     const validatedData = WeightEffectSchema.parse(weightEffectData);
-    log('✓ Weight effects data validation passed');
+    logSuccess('Weight effects data validation passed');
 
     // Write processed data
     const processedPath = path.join(procDir, 'weight_effect.json');
@@ -44,7 +44,7 @@ async function run() {
     const latestPath = path.join('data/latest/weight_effect.json');
     await writeFileWithDirs(latestPath, JSON.stringify(validatedData, null, 2));
 
-    logSuccess('✓ Weight effects pipeline completed successfully');
+    logSuccess('Weight effects pipeline completed successfully');
 
   } catch (error) {
     console.error('Weight effects pipeline failed:', error);

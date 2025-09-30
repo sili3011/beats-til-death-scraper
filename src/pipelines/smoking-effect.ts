@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { SmokingEffect, SmokingEffectSchema } from '../types.js';
-import { log, logError } from '../lib/log.js';
+import { log, logError, logSuccess } from '../lib/log.js';
 
 const TIMESTAMP = process.env.TIMESTAMP || new Date().toISOString().split('T')[0]!;
 
@@ -29,7 +29,7 @@ export async function runSmokingEffectPipeline(): Promise<void> {
     
     // Validate the curated data
     const validatedData = SmokingEffectSchema.parse(SMOKING_EFFECT_DATA);
-    log('✓ Smoking effects data validation passed');
+    logSuccess('Smoking effects data validation passed');
     
     // Create directories
     const processedDir = path.join(process.cwd(), 'data', 'processed', TIMESTAMP);
@@ -48,7 +48,7 @@ export async function runSmokingEffectPipeline(): Promise<void> {
     await fs.writeFile(latestPath, JSON.stringify(validatedData, null, 2));
     log(`Written: ${latestPath}`);
     
-    log('✓ Smoking effects pipeline completed successfully');
+    logSuccess('Smoking effects pipeline completed successfully');
     
   } catch (error) {
     logError('Smoking effects pipeline failed', error);

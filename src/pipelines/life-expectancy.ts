@@ -2,11 +2,12 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { LifeRow } from '../types.js';
 import { fetchWorldBank } from '../sources/worldbank.js';
-import { fetchWHO } from '../sources/who.js';
+import { fetchWHOLifeExpectancy as fetchWHO } from '../sources/who.js';
 import { fetchOECD } from '../sources/oecd.js';
 import { fetchManualData } from '../sources/manual.js';
 import { dedupeKeepLatest, lifeDataKey } from '../lib/normalize.js';
 import { writeFileWithDirs } from '../lib/files.js';
+import { getArg } from '../lib/args.js';
 import { log, logError, logSuccess } from '../lib/log.js';
 
 async function run() {
@@ -15,8 +16,8 @@ async function run() {
     const rawDir = path.join('data/raw', stamp);
     const procDir = path.join('data/processed', stamp);
     
-    // Parse command line arguments
-    const source = process.argv.find(arg => arg.startsWith('--source='))?.split('=')[1] || 'all';
+    // Parse command line arguments (supports --source=who or --source who)
+    const source = getArg(process.argv, '--source') || 'all';
     
     log(`Starting life expectancy data pipeline for source: ${source}`);
     

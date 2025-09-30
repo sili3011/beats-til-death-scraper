@@ -35,7 +35,7 @@ async function run() {
 
     // Validate the data
     const validatedData = AlcoholEffectSchema.parse(alcoholEffectData);
-    log('✓ Alcohol effects data validation passed');
+    logSuccess('Alcohol effects data validation passed');
 
     // Write processed data
     const processedPath = path.join(procDir, 'alcohol_effect.json');
@@ -46,7 +46,7 @@ async function run() {
     const latestPath = path.join('data/latest/alcohol_effect.json');
     await writeFileWithDirs(latestPath, JSON.stringify(validatedData, null, 2));
 
-    logSuccess('✓ Alcohol effects pipeline completed successfully');
+    logSuccess('Alcohol effects pipeline completed successfully');
 
   } catch (error) {
     console.error('Alcohol effects pipeline failed:', error);

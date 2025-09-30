@@ -81,14 +81,19 @@ console.log(
 
 ### CommonJS
 
+This package is ESM-only. In CommonJS environments, use dynamic import:
+
 ```javascript
-const {
-  lifeExpectancy,
-  rhrEffect,
-  smokingEffect,
-  exerciseEffect,
-  getAllData,
-} = require("@sili3011/lifedata");
+(async () => {
+  const lifedata = await import("@sili3011/lifedata");
+  const {
+    lifeExpectancy,
+    rhrEffect,
+    smokingEffect,
+    exerciseEffect,
+    getAllData,
+  } = lifedata;
+})();
 ```
 
 ### Default Import

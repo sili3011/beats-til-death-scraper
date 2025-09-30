@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { ExerciseEffect, ExerciseEffectSchema } from '../types.js';
-import { log, logError } from '../lib/log.js';
+import { log, logError, logSuccess } from '../lib/log.js';
 
 const TIMESTAMP = process.env.TIMESTAMP || new Date().toISOString().split('T')[0]!;
 
@@ -30,7 +30,7 @@ export async function runExerciseEffectPipeline(): Promise<void> {
     
     // Validate the curated data
     const validatedData = ExerciseEffectSchema.parse(EXERCISE_EFFECT_DATA);
-    log('✓ Exercise effects data validation passed');
+    logSuccess('Exercise effects data validation passed');
     
     // Create directories
     const processedDir = path.join(process.cwd(), 'data', 'processed', TIMESTAMP);
@@ -49,7 +49,7 @@ export async function runExerciseEffectPipeline(): Promise<void> {
     await fs.writeFile(latestPath, JSON.stringify(validatedData, null, 2));
     log(`Written: ${latestPath}`);
     
-    log('✓ Exercise effects pipeline completed successfully');
+    logSuccess('Exercise effects pipeline completed successfully');
     
   } catch (error) {
     logError('Exercise effects pipeline failed', error);

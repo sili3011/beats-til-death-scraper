@@ -16,10 +16,11 @@ export function logError(message: string, error?: unknown): void {
 
 export function logSuccess(message: string): void {
   const timestamp = new Date().toISOString();
-  console.log(`[${timestamp}] ✓ ${message}`);
+  console.log(`[${timestamp}] ✅ ${message}`);
 }
 
 export function logWarning(message: string): void {
   const timestamp = new Date().toISOString();
-  console.warn(`[${timestamp}] ⚠ ${message}`);
+  console.warn(`[${timestamp}] ⚠️ ${message}`);
 }
+

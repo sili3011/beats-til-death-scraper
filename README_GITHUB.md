@@ -2,7 +2,7 @@
 
 A comprehensive TypeScript-based data scraper for life expectancy and health effects data from authoritative sources including World Bank, WHO, and OECD. Features evidence-based health effect estimates for resting heart rate, smoking, exercise, and lifestyle factors.
 
-## 📦 NPM Package
+## NPM Package
 
 This data is available as an NPM package for easy integration in your applications:
 
@@ -53,15 +53,15 @@ See [NPM_USAGE.md](NPM_USAGE.md) for complete usage documentation.
 
 ## Features
 
-- 🌍 **Multiple Data Sources**: World Bank (16,670+ records), WHO (4,026+ records), OECD, and manual data
-- 📊 **Structured Output**: JSON format with comprehensive Zod validation
-- 🔄 **Automated Pipeline**: Daily scraping with automatic NPM publishing
-- � **Health Effects**: Evidence-based data for heart rate, smoking, exercise, and lifestyle factors
-- 📈 **Risk Analysis**: Mortality risk bands and hazard ratios from meta-analyses
-- 🏷️ **Data Versioning**: Timestamped raw and processed data with git integration
-- ✅ **TypeScript Support**: Full type definitions and schema validation
-- 🚦 **Rate Limiting**: Respectful API usage with exponential backoff retry
-- 📦 **NPM Publishing**: Automatic publishing after successful data scrapes
+- Multiple Data Sources: World Bank (16,670+ records), WHO (4,026+ records), OECD, and manual data
+- Structured Output: JSON format with comprehensive Zod validation
+- Automated Pipeline: Daily scraping with automatic NPM publishing
+- Health Effects: Evidence-based data for heart rate, smoking, exercise, and lifestyle factors
+- Risk Analysis: Mortality risk bands and hazard ratios from meta-analyses
+- Data Versioning: Timestamped raw and processed data with git integration
+- TypeScript Support: Full type definitions and schema validation
+- Rate Limiting: Respectful API usage with exponential backoff retry
+- NPM Publishing: Automatic publishing after successful data scrapes
 
 ## Installation
 
@@ -246,3 +246,5 @@ The repository includes automated workflows for:
 This data is provided for educational and research purposes only. All effect sizes are conservative estimates derived from population studies and meta-analyses. Individual results may vary significantly based on genetics, existing health conditions, and other factors.
 
 **Important**: This data should not be used for medical decision-making, diagnosis, or treatment planning. Always consult qualified healthcare professionals for medical advice and personalized health recommendations.
+
+

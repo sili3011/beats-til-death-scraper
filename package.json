@@ -1,6 +1,6 @@
 {
   "name": "@sili3011/lifedata",
-  "version": "2025.9.30-252",
+  "version": "2025.9.30-2522",
   "description": "Life expectancy and lifestyle effects data scraper with curated datasets",
   "type": "module",
   "main": "data/latest/index.js",

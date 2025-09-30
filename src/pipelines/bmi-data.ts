@@ -4,6 +4,7 @@ import { BMIRow } from '../types.js';
 import { fetchWHOBMI } from '../sources/who.js';
 import { dedupeKeepLatest } from '../lib/normalize.js';
 import { writeFileWithDirs } from '../lib/files.js';
+import { getArg } from '../lib/args.js';
 import { log, logError, logSuccess } from '../lib/log.js';
 
 function bmiDataKey(row: BMIRow): string {
@@ -16,8 +17,8 @@ async function run() {
     const rawDir = path.join('data/raw', stamp);
     const procDir = path.join('data/processed', stamp);
 
-    // Parse command line arguments
-    const source = process.argv.find(arg => arg.startsWith('--source='))?.split('=')[1] || 'all';
+    // Parse command line arguments (supports --source=who or --source who)
+    const source = getArg(process.argv, '--source') || 'all';
 
     log(`Starting BMI/obesity data pipeline for source: ${source}`);
 
