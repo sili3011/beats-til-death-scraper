@@ -46,9 +46,19 @@ This package is ESM-only. In CJS, use dynamic import:
 - `weightEffect: WeightEffect | null`
 - `lifestyleEffects: Effects` (legacy)
 - `metadata: Metadata`
+- `sourceInfo: SourceInfo` (dataset links and paper references)
 - `getAllData(): { ... }`
 
 ## Types
 
 TypeScript consumers get bundled declarations from `data/latest/index.d.ts`.
 
+`SourceInfo` contains:
+
+```ts
+interface SourceRef { title: string; url: string }
+interface SourceInfo {
+  datasets: Record<string, { name: string; url: string; api?: string; docs?: string; license?: string; note?: string }>;
+  effects: Record<string, { name: string; references: SourceRef[] } | null>;
+}
+```

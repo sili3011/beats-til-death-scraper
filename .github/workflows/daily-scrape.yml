@@ -1,9 +1,9 @@
-name: Daily Data Scrape
+name: Weekly Data Scrape
 
 on:
   schedule:
-    # Run daily at 2 AM UTC
-    - cron: "0 2 * * *"
+    # Run weekly at 2 AM UTC on Sunday
+    - cron: "0 2 * * 0"
   workflow_dispatch: # Allow manual triggers
   push:
     branches: [main]
@@ -20,6 +20,8 @@ permissions:
 
 jobs:
   scrape-and-update:
+    # Prevent workflow loop on bot commits
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -58,34 +60,28 @@ jobs:
             echo "changed=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Commit and push changes
-        if: steps.verify-changed-files.outputs.changed == 'true'
-        run: |
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git add data/
-          git commit -m "chore: update data files $(date -u +%Y-%m-%d)"
-          git push origin main
-
-      - name: Bump version and publish to NPM
+      - name: Version, generate exports, commit, tag, push and publish
         if: steps.verify-changed-files.outputs.changed == 'true'
         run: |
           # Generate version based on date: YYYY.M.D-HHMM for patch releases
           DATE_VERSION=$(date -u +%Y.%-m.%-d-%H%M)
           echo "Publishing version $DATE_VERSION to NPM"
 
-          # Update package version (creates git tag automatically)
-          npm version $DATE_VERSION
+          # Update package version without auto-commit/tag
+          npm version $DATE_VERSION --no-git-tag-version
 
           # Generate package exports
           npm run generate:exports
 
-          # Add the generated exports to git
-          git add data/latest/
-          git commit --amend --no-edit
+          # Configure git and commit all data + version changes (skip CI to avoid loops)
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add data/ package.json package-lock.json || true
+          git commit -m "chore: data update and release $DATE_VERSION [skip ci]"
 
-          # Push the version tag
-          git push --follow-tags
+          # Create and push tag, push commit
+          git tag "v$DATE_VERSION"
+          git push origin main --follow-tags
 
           # Enable supply-chain provenance (npm >= 9.5)
           echo "NPM_CONFIG_PROVENANCE=true" >> $GITHUB_ENV

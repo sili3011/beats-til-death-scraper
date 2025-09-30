@@ -1,4 +1,9 @@
-# NPM Package Usage Guide
+# @sili3011/lifedata
+
+[![npm version](https://img.shields.io/npm/v/%40sili3011%2Flifedata.svg)](https://www.npmjs.com/package/@sili3011/lifedata)
+[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
+Comprehensive, ready‑to‑use life expectancy and evidence‑based health effects datasets with direct links to sources and papers. ESM‑only package with bundled TypeScript types.
 
 Comprehensive life expectancy data (20,699+ records) and evidence-based health effects data from authoritative sources including World Bank, WHO, and medical meta-analyses.
 
@@ -49,6 +54,7 @@ import {
   weightEffect,
   lifestyleEffects,
   metadata,
+  sourceInfo,
   getAllData,
 } from "@sili3011/lifedata";
 
@@ -73,15 +79,19 @@ console.log("Weight effect (obese years lost):", weightEffect.obese_years_lost);
 // Get all data at once
 const allData = getAllData();
 // Sorted order in allData:
-// lifeExpectancy, rhrEffect, smokingEffect, exerciseEffect, alcoholEffect, weightEffect, lifestyleEffects, metadata, getAllData
+// lifeExpectancy, rhrEffect, smokingEffect, exerciseEffect, alcoholEffect, weightEffect, lifestyleEffects, metadata, sourceInfo, getAllData
 console.log(
   `Package contains ${allData.metadata.lifeExpectancyRecords} records`
 );
+
+// Link to original sources/papers
+console.log('World Bank dataset:', sourceInfo.datasets.worldbank_life_expectancy.url);
+console.log('RHR references:', sourceInfo.effects.rhr?.references);
 ```
 
-### CommonJS
+### CommonJS (ESM-only)
 
-This package is ESM-only. In CommonJS environments, use dynamic import:
+This package is ESM‑only. In CommonJS environments, use dynamic import:
 
 ```javascript
 (async () => {
@@ -101,7 +111,7 @@ This package is ESM-only. In CommonJS environments, use dynamic import:
 ```javascript
 import lifedata from "@sili3011/lifedata";
 
-const { lifeExpectancy, rhrEffect, metadata } = lifedata;
+const { lifeExpectancy, rhrEffect, metadata, sourceInfo } = lifedata;
 ```
 
 ## Data Structures
@@ -281,6 +291,23 @@ interface Metadata {
   version: string; // Package version
   effectTypes: string[]; // Available effect types
 }
+
+### Source Links & Citations
+
+The package bundles a `sourceInfo` object containing dataset links and paper references for easy attribution:
+
+```typescript
+interface SourceRef { title: string; url: string }
+interface SourceInfo {
+  datasets: Record<string, { name: string; url: string; api?: string; docs?: string; license?: string; note?: string }>;
+  effects: Record<string, { name: string; references: SourceRef[] } | null>;
+}
+
+// Usage example
+import { sourceInfo } from '@sili3011/lifedata';
+console.log(sourceInfo.datasets.worldbank_life_expectancy.url);
+console.log(sourceInfo.effects.rhr?.references);
+```
 ```
 
 ## Practical Examples

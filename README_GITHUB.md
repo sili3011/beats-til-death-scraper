@@ -37,6 +37,10 @@ console.log("Exercise benefit:", exerciseEffect.mod_150min_week_gain); // 2 year
 
 // Get all data as a single object
 const allData = getAllData();
+
+// Link to sources and papers
+console.log('World Bank dataset:', allData.sourceInfo.datasets.worldbank_life_expectancy.url);
+console.log('Exercise references:', allData.sourceInfo.effects.exercise?.references);
 ```
 
 ### Available Exports
@@ -47,6 +51,7 @@ const allData = getAllData();
 - `exerciseEffect` - Physical activity health benefits
 - `lifestyleEffects` - Legacy format lifestyle effects (deprecated)
 - `metadata` - Package version and statistics
+- `sourceInfo` - Dataset links and effect references
 - `getAllData()` - Function returning all data objects
 
 See [NPM_USAGE.md](NPM_USAGE.md) for complete usage documentation.
@@ -119,6 +124,15 @@ npm run validate
 ```bash
 # Run the main script
 npm run dev
+```
+
+Note: This package is ESM-only. In CommonJS environments, use dynamic import:
+
+```js
+(async () => {
+  const lifedata = await import('@sili3011/lifedata');
+  console.log(lifedata.sourceInfo.datasets.worldbank_life_expectancy.url);
+})();
 ```
 
 ## Data Outputs
