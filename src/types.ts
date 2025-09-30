@@ -105,6 +105,28 @@ export const WeightEffectSchema = z.object({
 });
 export type WeightEffect = z.infer<typeof WeightEffectSchema>;
 
+// Drug/Substance Use Mortality Data Schema (per 100k population)
+export const DrugUseMortalityRow = z.object({
+  country_code: z.string().length(3),
+  country_name: z.string(),
+  year: z.number().int().min(1950).max(2100),
+  drug_use_mortality_rate: z.number().min(0).max(1000), // deaths per 100k
+  source: z.string(),
+  retrieved_at: z.string()
+});
+export type DrugUseMortalityRow = z.infer<typeof DrugUseMortalityRow>;
+
+// Smoking Prevalence Data Schema (percentage of adults)
+export const SmokingRow = z.object({
+  country_code: z.string().length(3),
+  country_name: z.string(),
+  year: z.number().int().min(1950).max(2100),
+  smoking_prevalence: z.number().min(0).max(100), // percent of adults
+  source: z.string(),
+  retrieved_at: z.string(),
+});
+export type SmokingRow = z.infer<typeof SmokingRow>;
+
 // Legacy Effects Schema (keeping for backward compatibility)
 export const EffectsSchema = z.object({
   smoking: z.object({

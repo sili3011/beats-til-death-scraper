@@ -17,7 +17,8 @@
     "./alcohol-effect": "./data/latest/alcohol_effect.json",
     "./weight-effect": "./data/latest/weight_effect.json",
     "./alcohol-consumption": "./data/latest/alcohol_consumption.json",
-    "./bmi-obesity": "./data/latest/bmi_obesity.json"
+    "./bmi-obesity": "./data/latest/bmi_obesity.json",
+    "./drug-use-mortality": "./data/latest/drug_use_mortality.json"
   },
   "files": [
     "data/latest/**/*",
@@ -26,19 +27,21 @@
     "LICENSES/**/*"
   ],
   "scripts": {
-    "scrape:wb": "tsx src/pipelines/life-expectancy.ts --source worldbank",
-    "scrape:who": "tsx src/pipelines/life-expectancy.ts --source who",
-    "scrape:oecd": "tsx src/pipelines/life-expectancy.ts --source oecd",
-    "scrape:alcohol": "tsx src/pipelines/alcohol-data.ts --source who",
+    "scrape:life": "tsx src/pipelines/life-expectancy.ts",
+    "scrape:alcohol": "tsx src/pipelines/alcohol-data.ts",
+    "scrape:alcohol:owid": "tsx src/pipelines/alcohol-data.ts --source owid",
     "scrape:bmi": "tsx src/pipelines/bmi-data.ts --source who",
+    "scrape:drug-mortality": "tsx src/pipelines/druguse-mortality-data.ts",
+    "scrape:cannabis": "npm run scrape:drug-mortality",
     "build:effects": "tsx src/pipelines/lifestyle-effects.ts",
+    "scrape:smoking": "tsx src/pipelines/smoking-data.ts --source owid",
     "build:rhr": "tsx src/pipelines/rhr-effect.ts",
     "build:smoking": "tsx src/pipelines/smoking-effect.ts",
     "build:exercise": "tsx src/pipelines/exercise-effect.ts",
     "build:alcohol": "tsx src/pipelines/alcohol-effect.ts",
     "build:weight": "tsx src/pipelines/weight-effect.ts",
     "validate": "tsx src/lib/validate.ts",
-    "build": "npm run scrape:wb && npm run scrape:who && npm run scrape:alcohol && npm run scrape:bmi && npm run build:effects && npm run build:rhr && npm run build:smoking && npm run build:exercise && npm run build:alcohol && npm run build:weight && npm run validate",
+    "build": "npm run scrape:life && npm run scrape:alcohol && npm run scrape:bmi && npm run scrape:drug-mortality && npm run scrape:smoking && npm run build:effects && npm run build:rhr && npm run build:smoking && npm run build:exercise && npm run build:alcohol && npm run build:weight && npm run validate",
     "build:package": "npm run build && npm run generate:exports",
     "generate:exports": "node scripts/generate-exports.js",
     "test": "vitest run",

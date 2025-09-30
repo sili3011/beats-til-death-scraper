@@ -52,6 +52,8 @@ import {
   exerciseEffect,
   alcoholEffect,
   weightEffect,
+  drugUseMortality,
+  smokingPrevalence,
   lifestyleEffects,
   metadata,
   sourceInfo,
@@ -85,8 +87,9 @@ console.log(
 );
 
 // Link to original sources/papers
+console.log('Drug/substance mortality WHO reference:', sourceInfo.datasets.who_drug_use_mortality.url);
 console.log('World Bank dataset:', sourceInfo.datasets.worldbank_life_expectancy.url);
-console.log('RHR references:', sourceInfo.effects.rhr?.references);
+console.log("RHR references:", sourceInfo.effects.rhr?.references);
 ```
 
 ### CommonJS (ESM-only)
@@ -283,7 +286,7 @@ interface Effects {
 
 ### Metadata Structure
 
-```typescript
+````typescript
 interface Metadata {
   lastUpdated: string; // ISO timestamp of last update
   lifeExpectancyRecords: number; // Total life expectancy records
@@ -307,8 +310,9 @@ interface SourceInfo {
 import { sourceInfo } from '@sili3011/lifedata';
 console.log(sourceInfo.datasets.worldbank_life_expectancy.url);
 console.log(sourceInfo.effects.rhr?.references);
-```
-```
+````
+
+````
 
 ## Practical Examples
 
@@ -333,7 +337,7 @@ const assessHealthRisks = (profile) => {
 
   return risks;
 };
-```
+````
 
 ### Country Comparison Tool
 
@@ -413,7 +417,7 @@ import type {
 
 ## Update Frequency
 
-- **Daily Automation**: Package updates automatically at 2 AM UTC daily
+- **Weekly Automation**: Package updates automatically at 2 AM UTC weekly
 - **Fresh Data**: Always includes latest available data from all sources
 - **Version Control**: Date-based versioning (YYYY.M.D-HHMM format)
 - **Manual Releases**: Tag-triggered releases for immediate updates
@@ -444,3 +448,45 @@ MIT License - see LICENSE file for details.
 - **Feature Requests**: Open GitHub issues for new data sources
 - **Documentation**: Improvements welcome via pull requests
 - **Data Quality**: Report data inconsistencies or validation errors
+
+
+
+### Drug/Substance Use Mortality Data
+
+WHO drug/substance-related mortality rates (per 100k population):
+
+```typescript
+interface DrugUseMortalityRow {
+  country_code: string; // ISO3
+  country_name: string;
+  year: number;
+  drug_use_mortality_rate: number; // deaths per 100k population
+  source: string; // 'who'
+  retrieved_at: string; // ISO timestamp
+}
+
+// Usage example
+const getDrugUseMortality = (code: string, year: number) =>
+  drugUseMortality?.find(r => r.country_code === code && r.year === year);
+```
+
+### Smoking Prevalence
+
+OWID smoking prevalence (percent of adults):
+
+```typescript
+interface SmokingRow {
+  country_code: string; // ISO3
+  country_name: string;
+  year: number;
+  smoking_prevalence: number; // percent of adults
+  source: string;
+  retrieved_at: string;
+}
+```
+
+### Alcohol Consumption (OWID)
+
+Alternative source via OWID grapher datasets. Use script `npm run scrape:alcohol:owid`.
+
+

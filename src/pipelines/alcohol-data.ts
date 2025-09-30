@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { AlcoholRow } from '../types.js';
 import { fetchWHOAlcoholConsumption } from '../sources/who.js';
+import { fetchOWIDAlcoholConsumption } from '../sources/owid.js';
 import { dedupeKeepLatest } from '../lib/normalize.js';
 import { writeFileWithDirs } from '../lib/files.js';
 import { getArg } from '../lib/args.js';
@@ -40,6 +41,20 @@ async function run() {
         logSuccess(`WHO alcohol: ${whoData.length} records`);
       } catch (error) {
         logError('WHO alcohol fetch failed', error);
+      }
+    }
+
+    if (source === 'owid' || source === 'all') {
+      try {
+        const owidData = await fetchOWIDAlcoholConsumption();
+        await writeFileWithDirs(
+          path.join(rawDir, 'owid_alcohol_consumption.json'),
+          JSON.stringify(owidData, null, 2)
+        );
+        allData.push(...owidData);
+        logSuccess(`OWID alcohol: ${owidData.length} records`);
+      } catch (error) {
+        logError('OWID alcohol fetch failed', error);
       }
     }
 

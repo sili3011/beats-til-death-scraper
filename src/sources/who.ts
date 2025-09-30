@@ -11,6 +11,12 @@ const WHO_ALCOHOL_URL = 'https://ghoapi.azureedge.net/api/SA_0000001400';
 const WHO_OBESITY_URL = 'https://ghoapi.azureedge.net/api/NCD_BMI_30A';
 // Optional: Overweight prevalence BMI >= 25
 const WHO_OVERWEIGHT_URL = 'https://ghoapi.azureedge.net/api/NCD_BMI_25A';
+// Drug/substance-related mortality indicator (configurable via env)
+function drugUseMortalityUrl(): string {
+  const fallback = 'MORT_DRUGUSE';
+  const code = (process.env.WHO_DRUGUSE_INDICATOR || process.env.WHO_CANNABIS_INDICATOR || fallback).trim();
+  return `https://ghoapi.azureedge.net/api/${code}`;
+}
 
 interface WHOResponse {
   value: Array<{
@@ -376,4 +382,62 @@ export async function fetchWHOBMI(): Promise<BMIRow[]> {
 // Keep the original function name for backwards compatibility
 export async function fetchWHO(): Promise<LifeRow[]> {
   return fetchWHOLifeExpectancy();
+}
+
+export async function fetchWHODrugUseMortality(): Promise<import('../types.js').DrugUseMortalityRow[]> {
+  const out: import('../types.js').DrugUseMortalityRow[] = [];
+
+  try {
+    log('Starting WHO drug/substance-related mortality data fetch...');
+
+    const response = await httpGetJson(drugUseMortalityUrl());
+    if (response.status === 304) {
+      log('WHO drug/substance mortality data not modified');
+      return [];
+    }
+    if ((response as any).status === 404) {
+      logWarning('WHO drug/substance mortality indicator not found (404)');
+      return [];
+    }
+
+    const data = response.json as WHOResponse;
+    if (!data.value || !Array.isArray(data.value)) {
+      logWarning('No WHO drug/substance mortality data values found');
+      return [];
+    }
+
+    for (const record of data.value) {
+      try {
+        if (record.NumericValue == null || record.NumericValue < 0) continue;
+        const countryCode = record.SpatialDim;
+        if (!countryCode || countryCode.length !== 3) continue;
+        const iso3Code = WHO_TO_ISO3[countryCode];
+        if (!iso3Code) continue;
+        const year = record.TimeDim;
+        if (!year || year < 1950 || year > 2100) continue;
+        const rate = record.NumericValue; // deaths per 100k
+        if (rate < 0 || rate > 1000) continue;
+
+        const countryName = record.ParentLocation && record.ParentLocation !== 'null'
+          ? record.ParentLocation
+          : countryCode;
+
+        out.push({
+          country_code: iso3Code,
+          country_name: countryName,
+          year,
+          drug_use_mortality_rate: rate,
+          source: 'who',
+          retrieved_at: new Date().toISOString()
+        });
+      } catch {}
+    }
+
+    log(`Successfully fetched ${out.length} WHO drug/substance mortality records`);
+    return out;
+
+  } catch (error) {
+    logError('Failed to fetch WHO drug/substance mortality data', error);
+    return [];
+  }
 }
