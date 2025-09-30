@@ -44,6 +44,8 @@ This package is ESM-only. In CJS, use dynamic import:
 - `exerciseEffect: ExerciseEffect | null`
 - `alcoholEffect: AlcoholEffect | null`
 - `weightEffect: WeightEffect | null`
+- `drugUseMortality: DrugUseMortalityRow[]`
+- `smokingPrevalence: SmokingRow[]`
 - `lifestyleEffects: Effects` (legacy)
 - `metadata: Metadata`
 - `sourceInfo: SourceInfo` (dataset links and paper references)
@@ -61,4 +63,30 @@ interface SourceInfo {
   datasets: Record<string, { name: string; url: string; api?: string; docs?: string; license?: string; note?: string }>;
   effects: Record<string, { name: string; references: SourceRef[] } | null>;
 }
+
+### Drug/Substance Use Mortality
+
+```ts
+interface DrugUseMortalityRow {
+  country_code: string;
+  country_name: string;
+  year: number;
+  drug_use_mortality_rate: number;
+  source: string;
+  retrieved_at: string;
+}
+```
+
+### Smoking Prevalence
+
+```ts
+interface SmokingRow {
+  country_code: string;
+  country_name: string;
+  year: number;
+  smoking_prevalence: number; // percent of adults
+  source: string;
+  retrieved_at: string;
+}
+```
 ```

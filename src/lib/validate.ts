@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { LifeRow, EffectsSchema, RhrEffectSchema, SmokingEffectSchema, ExerciseEffectSchema, AlcoholRow, BMIRow, AlcoholEffectSchema, WeightEffectSchema } from '../types.js';
+import { LifeRow, EffectsSchema, RhrEffectSchema, SmokingEffectSchema, ExerciseEffectSchema, AlcoholRow, BMIRow, AlcoholEffectSchema, WeightEffectSchema, DrugUseMortalityRow, SmokingRow } from '../types.js';
 import { log } from './log.js';
 
 /**
@@ -171,7 +171,8 @@ export async function validateAll(): Promise<void> {
     { path: path.join(latestDir, 'alcohol_effect.json'), validator: (p: string) => validateEffectFile(p, AlcoholEffectSchema, 'Alcohol effect'), name: 'Alcohol effect' },
     { path: path.join(latestDir, 'weight_effect.json'), validator: (p: string) => validateEffectFile(p, WeightEffectSchema, 'Weight effect'), name: 'Weight effect' },
     { path: path.join(latestDir, 'alcohol_consumption.json'), validator: validateAlcoholData, name: 'Alcohol consumption' },
-    { path: path.join(latestDir, 'bmi_obesity.json'), validator: validateBMIData, name: 'BMI/obesity' }
+    { path: path.join(latestDir, 'bmi_obesity.json'), validator: validateBMIData, name: 'BMI/obesity' },
+    { path: path.join(latestDir, 'drug_use_mortality.json'), validator: validateDrugUseMortalityData, name: 'Drug/substance mortality' }
   ];
   
   let allValid = true;
@@ -190,6 +191,60 @@ export async function validateAll(): Promise<void> {
   }
   
   log('All validations passed');
+}
+
+/**
+ * Validate cannabis mortality data
+ */
+export async function validateDrugUseMortalityData(filePath: string): Promise<boolean> {
+  try {
+    const content = await fs.readFile(filePath, 'utf8');
+    const data = JSON.parse(content);
+
+    if (!Array.isArray(data)) throw new Error('Data must be an array');
+
+    let validCount = 0;
+    const errors: string[] = [];
+    for (const [index, row] of data.entries()) {
+      try {
+        DrugUseMortalityRow.parse(row);
+        validCount++;
+      } catch (error) {
+        errors.push(`Row ${index}: ${error}`);
+        if (errors.length > 10) break;
+      }
+    }
+
+    log(`Validated ${validCount}/${data.length} drug/substance mortality rows`);
+
+    if (errors.length > 0) {
+      log(`Validation errors (showing first 10):`);
+      errors.forEach(err => log(`  ${err}`));
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    log(`Drug/substance mortality validation failed: ${error}`);
+    return false;
+  }
+}
+
+/** Validate smoking prevalence data */
+export async function validateSmokingData(filePath: string): Promise<boolean> {
+  try {
+    const content = await fs.readFile(filePath, 'utf8');
+    const data = JSON.parse(content);
+    if (!Array.isArray(data)) throw new Error('Data must be an array');
+    let validCount = 0; const errors: string[] = [];
+    for (const [i, row] of data.entries()) {
+      try { SmokingRow.parse(row); validCount++; }
+      catch (e) { errors.push(`Row ${i}: ${e}`); if (errors.length>10) break; }
+    }
+    log(`Validated ${validCount}/${data.length} smoking prevalence rows`);
+    if (errors.length) { log('Validation errors (showing first 10):'); errors.forEach(err=>log(`  ${err}`)); return false; }
+    return true;
+  } catch (e) { log(`Smoking validation failed: ${e}`); return false; }
 }
 
 // CLI runner

@@ -18,6 +18,8 @@ async function generateExports() {
     exerciseEffect: path.join(latestDir, "exercise_effect.json"),
     alcoholEffect: path.join(latestDir, "alcohol_effect.json"),
     weightEffect: path.join(latestDir, "weight_effect.json"),
+    drugUseMortality: path.join(latestDir, "drug_use_mortality.json"),
+    smokingPrevalence: path.join(latestDir, "smoking_prevalence.json"),
   };
 
   // Ensure core files exist
@@ -78,6 +80,20 @@ async function generateExports() {
       manual_life_expectancy: {
         name: 'Manual life expectancy CSV',
         url: 'data/manual/life_expectancy.csv',
+      },
+      who_drug_use_mortality: {
+        name: 'WHO GHO: Drug/substance-related mortality (indicator configurable)',
+        url: 'https://ghoapi.azureedge.net/api/MORT_DRUGUSE',
+        note: 'Set WHO_DRUGUSE_INDICATOR env (legacy WHO_CANNABIS_INDICATOR supported)',
+      },
+      owid_drug_use_mortality: {
+        name: 'Our World in Data: Drug/substance mortality rate datasets (grapher) – rate-based slugs preferred',
+        url: 'https://ourworldindata.org/illicit-drug-use',
+        note: 'Override slug list with OWID_CANNABIS_SLUG_LIST or preferred rate-based slugs',
+      },
+      manual_drug_use_mortality: {
+        name: 'Manual drug/substance mortality CSV',
+        url: 'data/manual/drug_use_mortality.csv',
       },
     },
     effects: {
@@ -141,6 +157,8 @@ async function generateExports() {
   indexJsLines.push("export const exerciseEffect = " + dataStrings.exerciseEffect + ";");
   indexJsLines.push("export const alcoholEffect = " + dataStrings.alcoholEffect + ";");
   indexJsLines.push("export const weightEffect = " + dataStrings.weightEffect + ";");
+  indexJsLines.push("export const drugUseMortality = " + dataStrings.drugUseMortality + ";");
+  indexJsLines.push("export const smokingPrevalence = " + dataStrings.smokingPrevalence + ";");
   indexJsLines.push("export const sourceInfo = " + JSON.stringify(sourceInfo, null, 2) + ";");
   indexJsLines.push("");
   indexJsLines.push("export const metadata = {\n  lastUpdated: \"" + new Date().toISOString() + "\",\n  lifeExpectancyRecords: " + (data.lifeExpectancy?.length || 0) + ",\n  sources: [\"worldbank\", \"who\", \"oecd\", \"manual\"],\n  version: \"" + (process.env.npm_package_version || "0.0.0") + "\",\n  effectTypes: [\"rhr\", \"smoking\", \"exercise\", \"lifestyle\", \"alcohol\", \"weight\"],\n};");
@@ -171,6 +189,10 @@ async function generateExports() {
   dts.push("");
   dts.push("export interface Metadata {\n  lastUpdated: string;\n  lifeExpectancyRecords: number;\n  sources: string[];\n  version: string;\n  effectTypes: string[];\n}");
   dts.push("");
+  dts.push("export interface DrugUseMortalityRow {\\n  country_code: string;\\n  country_name: string;\\n  year: number;\\n  drug_use_mortality_rate: number;\\n  source: string;\\n  retrieved_at: string;\\n}");
+  dts.push("");
+  dts.push("export interface SmokingRow {\\n  country_code: string;\\n  country_name: string;\\n  year: number;\\n  smoking_prevalence: number;\\n  source: string;\\n  retrieved_at: string;\\n}");
+  dts.push("");
   dts.push("export interface SourceRef { title: string; url: string }");
   dts.push("export interface SourceInfo {\n  datasets: Record<string, { name: string; url: string; api?: string; docs?: string; license?: string; note?: string }>;\n  effects: Record<string, { name: string; references: SourceRef[] } | null>;\n}");
   dts.push("");
@@ -181,6 +203,8 @@ async function generateExports() {
   dts.push("export declare const exerciseEffect: ExerciseEffect | null;");
   dts.push("export declare const alcoholEffect: AlcoholEffect | null;");
   dts.push("export declare const weightEffect: WeightEffect | null;");
+  dts.push("export declare const drugUseMortality: DrugUseMortalityRow[] | null;");
+  dts.push("export declare const smokingPrevalence: SmokingRow[] | null;");
   dts.push("export declare const metadata: Metadata;");
   dts.push("export declare const sourceInfo: SourceInfo;");
   dts.push("");
