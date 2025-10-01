@@ -189,9 +189,9 @@ async function generateExports() {
   dts.push("");
   dts.push("export interface Metadata {\n  lastUpdated: string;\n  lifeExpectancyRecords: number;\n  sources: string[];\n  version: string;\n  effectTypes: string[];\n}");
   dts.push("");
-  dts.push("export interface DrugUseMortalityRow {\\n  country_code: string;\\n  country_name: string;\\n  year: number;\\n  drug_use_mortality_rate: number;\\n  source: string;\\n  retrieved_at: string;\\n}");
+  dts.push("export interface DrugUseMortalityRow {\n  country_code: string;\n  country_name: string;\n  year: number;\n  drug_use_mortality_rate: number;\n  source: string;\n  retrieved_at: string;\n}");
   dts.push("");
-  dts.push("export interface SmokingRow {\\n  country_code: string;\\n  country_name: string;\\n  year: number;\\n  smoking_prevalence: number;\\n  source: string;\\n  retrieved_at: string;\\n}");
+  dts.push("export interface SmokingRow {\n  country_code: string;\n  country_name: string;\n  year: number;\n  smoking_prevalence: number;\n  source: string;\n  retrieved_at: string;\n}");
   dts.push("");
   dts.push("export interface SourceRef { title: string; url: string }");
   dts.push("export interface SourceInfo {\n  datasets: Record<string, { name: string; url: string; api?: string; docs?: string; license?: string; note?: string }>;\n  effects: Record<string, { name: string; references: SourceRef[] } | null>;\n}");
