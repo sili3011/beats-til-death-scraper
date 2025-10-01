@@ -1,5 +1,5 @@
 // Auto-generated TypeScript definitions for lifedata
-// Generated on: 2025-09-30T19:45:43.891Z
+// Generated on: 2025-10-01T10:59:27.258Z
 
 export interface LifeRow {
   country_code: string;
@@ -77,9 +77,23 @@ export interface Metadata {
   effectTypes: string[];
 }
 
-export interface DrugUseMortalityRow {\n  country_code: string;\n  country_name: string;\n  year: number;\n  drug_use_mortality_rate: number;\n  source: string;\n  retrieved_at: string;\n}
+export interface DrugUseMortalityRow {
+  country_code: string;
+  country_name: string;
+  year: number;
+  drug_use_mortality_rate: number;
+  source: string;
+  retrieved_at: string;
+}
 
-export interface SmokingRow {\n  country_code: string;\n  country_name: string;\n  year: number;\n  smoking_prevalence: number;\n  source: string;\n  retrieved_at: string;\n}
+export interface SmokingRow {
+  country_code: string;
+  country_name: string;
+  year: number;
+  smoking_prevalence: number;
+  source: string;
+  retrieved_at: string;
+}
 
 export interface SourceRef { title: string; url: string }
 export interface SourceInfo {
