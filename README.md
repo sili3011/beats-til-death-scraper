@@ -7,6 +7,8 @@ Comprehensive, ready‑to‑use life expectancy and evidence‑based health effe
 
 Comprehensive life expectancy data (20,699+ records) and evidence-based health effects data from authoritative sources including World Bank, WHO, and medical meta-analyses.
 
+Developed for [BeatsTilDeath](https://www.beatstildeath.com/).
+
 ## Table of Contents
 
 1. [Installation](#installation)
@@ -377,7 +379,6 @@ console.log(compareCountries(["USA", "JPN", "DEU", "FRA"]));
 - **Framingham Heart Study**: Cardiovascular risk factors research
 - **WHO Guidelines**: Smoking cessation and physical activity recommendations
 - **CDC Health Data**: Exercise benefits and smoking effects research
-- **Manual Curation**: Conservative estimates from peer-reviewed research
 
 ## Error Handling
 
@@ -426,7 +427,6 @@ import type {
 - **Weekly Automation**: Publishes new versions to npm weekly at 2 AM UTC. The repository is not updated with generated data; latest datasets ship via npm.
 - **Fresh Data**: Always includes latest available data from configured sources
 - **Versioning**: Date-based versioning (YYYY.M.D-HHMM format)
-- **Manual Releases**: You can still publish manually by running the build and `npm publish` locally
 
 ## Best Practices
 
