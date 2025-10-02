@@ -1,7 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { DrugUseMortalityRow } from '../types.js';
-import { parse } from 'csv-parse';
 import { fetchWHODrugUseMortality } from '../sources/who.js';
 import { fetchOWIDDrugUseMortality } from '../sources/owid.js';
 import { dedupeKeepLatest } from '../lib/normalize.js';
@@ -51,40 +50,6 @@ async function run() {
       } catch (error) {
         logError('OWID drug/substance mortality fetch failed', error);
       }
-    }
-
-    // Optional: manual CSV fallback if present
-    try {
-      const manualPathPrimary = path.join('data', 'manual', 'drug_use_mortality.csv');
-      const manualPathLegacy = path.join('data', 'manual', 'cannabis_mortality.csv');
-      const manualPath = await fs.access(manualPathPrimary).then(()=>manualPathPrimary).catch(async()=> (await fs.access(manualPathLegacy).then(()=>manualPathLegacy).catch(()=>'')));
-      const exists = await fs.access(manualPath).then(() => true).catch(() => false);
-      if (exists && (source === 'manual' || source === 'all')) {
-        const content = await fs.readFile(manualPath, 'utf8');
-        const manualRows: DrugUseMortalityRow[] = await new Promise((resolve, reject) => {
-          parse(content, { columns: true, skip_empty_lines: true, comment: '#' }, (err, rows: any[]) => {
-            if (err) return reject(err);
-            try {
-              const mapped: DrugUseMortalityRow[] = rows.map((r) => ({
-                country_code: String(r.country_code),
-                country_name: String(r.country_name),
-                year: Number(r.year),
-                drug_use_mortality_rate: Number(r.drug_use_mortality_rate ?? r.cannabis_mortality_rate),
-                source: r.source || 'manual',
-                retrieved_at: new Date().toISOString(),
-              }));
-              resolve(mapped);
-            } catch (e) { reject(e); }
-          });
-        });
-        if (manualRows.length) {
-          await writeFileWithDirs(path.join(rawDir, 'manual_drug_use_mortality.json'), JSON.stringify(manualRows, null, 2));
-          allData.push(...manualRows);
-          logSuccess(`Manual drug/substance mortality: ${manualRows.length} records`);
-        }
-      }
-    } catch (error) {
-      logError('Manual drug/substance mortality load failed', error);
     }
 
     const merged = dedupeKeepLatest(allData, drugUseKey);

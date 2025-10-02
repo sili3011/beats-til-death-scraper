@@ -127,7 +127,7 @@ const { lifeExpectancy, rhrEffect, metadata, sourceInfo } = lifedata;
 
 ### Life Expectancy Data
 
-20,699+ records from World Bank, WHO, OECD, and manual sources:
+20,699+ records from World Bank, WHO, and OECD sources:
 
 ```typescript
 interface LifeRow {
@@ -135,7 +135,7 @@ interface LifeRow {
   country_name: string; // Full country name
   year: number; // Year (1960-2023)
   life_expectancy: number; // Life expectancy in years
-  source: string; // Data source ("worldbank", "who", "oecd", "manual")
+  source: string; // Data source ("worldbank", "who", "oecd")
   retrieved_at: string; // ISO timestamp of data retrieval
 }
 
