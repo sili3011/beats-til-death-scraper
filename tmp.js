@@ -59,7 +59,7 @@ export const weightEffect = ${dataStrings.weightEffect};
 export const metadata = {
   lastUpdated: "${new Date().toISOString()}",
   lifeExpectancyRecords: ${data.lifeExpectancy?.length || 0},
-  sources: ["worldbank", "who", "oecd", "manual"],
+  sources: ["worldbank", "who", "oecd"],
   version: "${process.env.npm_package_version || "0.0.0"}",
   effectTypes: ["rhr", "smoking", "exercise", "lifestyle", "alcohol", "weight"],
 };

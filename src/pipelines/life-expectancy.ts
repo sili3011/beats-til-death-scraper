@@ -4,7 +4,6 @@ import { LifeRow } from '../types.js';
 import { fetchWorldBank } from '../sources/worldbank.js';
 import { fetchWHOLifeExpectancy as fetchWHO } from '../sources/who.js';
 import { fetchOECD } from '../sources/oecd.js';
-import { fetchManualData } from '../sources/manual.js';
 import { dedupeKeepLatest, lifeDataKey } from '../lib/normalize.js';
 import { writeFileWithDirs } from '../lib/files.js';
 import { getArg } from '../lib/args.js';
@@ -67,22 +66,6 @@ async function run() {
         logSuccess(`OECD: ${oecdData.length} records`);
       } catch (error) {
         logError('OECD fetch failed', error);
-      }
-    }
-    
-    if (source === 'manual' || source === 'all') {
-      try {
-        const manualData = await fetchManualData();
-        if (manualData.length > 0) {
-          await writeFileWithDirs(
-            path.join(rawDir, 'manual_life_expectancy.json'),
-            JSON.stringify(manualData, null, 2)
-          );
-        }
-        allData.push(...manualData);
-        logSuccess(`Manual: ${manualData.length} records`);
-      } catch (error) {
-        logError('Manual data fetch failed', error);
       }
     }
     

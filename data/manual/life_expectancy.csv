@@ -1,7 +1,0 @@
-# Example manual life expectancy data
-# Format: country_code,country_name,year,life_expectancy,source
-country_code,country_name,year,life_expectancy,source
-USA,United States,2023,78.9,manual
-CAN,Canada,2023,82.4,manual
-GBR,United Kingdom,2023,81.2,manual
-# Add more manual data entries as needed

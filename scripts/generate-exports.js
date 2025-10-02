@@ -77,10 +77,6 @@ async function generateExports() {
         url: 'https://data.oecd.org/healthstat/life-expectancy-at-birth.htm',
         note: 'Direct API currently restricted; manual retrieval suggested.'
       },
-      manual_life_expectancy: {
-        name: 'Manual life expectancy CSV',
-        url: 'data/manual/life_expectancy.csv',
-      },
       who_drug_use_mortality: {
         name: 'WHO GHO: Drug/substance-related mortality (indicator configurable)',
         url: 'https://ghoapi.azureedge.net/api/MORT_DRUGUSE',
@@ -90,10 +86,6 @@ async function generateExports() {
         name: 'Our World in Data: Drug/substance mortality rate datasets (grapher) – rate-based slugs preferred',
         url: 'https://ourworldindata.org/illicit-drug-use',
         note: 'Override slug list with OWID_CANNABIS_SLUG_LIST or preferred rate-based slugs',
-      },
-      manual_drug_use_mortality: {
-        name: 'Manual drug/substance mortality CSV',
-        url: 'data/manual/drug_use_mortality.csv',
       },
     },
     effects: {
@@ -161,7 +153,7 @@ async function generateExports() {
   indexJsLines.push("export const smokingPrevalence = " + dataStrings.smokingPrevalence + ";");
   indexJsLines.push("export const sourceInfo = " + JSON.stringify(sourceInfo, null, 2) + ";");
   indexJsLines.push("");
-  indexJsLines.push("export const metadata = {\n  lastUpdated: \"" + new Date().toISOString() + "\",\n  lifeExpectancyRecords: " + (data.lifeExpectancy?.length || 0) + ",\n  sources: [\"worldbank\", \"who\", \"oecd\", \"manual\"],\n  version: \"" + (process.env.npm_package_version || "0.0.0") + "\",\n  effectTypes: [\"rhr\", \"smoking\", \"exercise\", \"lifestyle\", \"alcohol\", \"weight\"],\n};");
+  indexJsLines.push("export const metadata = {\n  lastUpdated: \"" + new Date().toISOString() + "\",\n  lifeExpectancyRecords: " + (data.lifeExpectancy?.length || 0) + ",\n  sources: [\"worldbank\", \"who\", \"oecd\"],\n  version: \"" + (process.env.npm_package_version || "0.0.0") + "\",\n  effectTypes: [\"rhr\", \"smoking\", \"exercise\", \"lifestyle\", \"alcohol\", \"weight\"],\n};");
   indexJsLines.push("");
   indexJsLines.push("export function getAllData() {\n  return {\n    lifeExpectancy,\n    lifestyleEffects,\n    rhrEffect,\n    smokingEffect,\n    exerciseEffect,\n    alcoholEffect,\n    weightEffect,\n    metadata,\n    sourceInfo,\n  };\n}");
   indexJsLines.push("");
